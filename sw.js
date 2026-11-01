@@ -1,6 +1,6 @@
 // เปลี่ยนเลขเวอร์ชันทุกครั้งที่อัปโหลดไฟล์ใหม่ เพื่อให้ผู้ใช้ได้เวอร์ชันล่าสุด
-const CACHE = 'payday-v1';
-const FILES = ['./', './index.html', './manifest.json', './icons/icon-192.png', './icons/icon-512.png', './icons/favicon.svg'];
+const CACHE = 'payday-v2';
+const FILES = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './favicon.svg'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES)).then(() => self.skipWaiting()));
