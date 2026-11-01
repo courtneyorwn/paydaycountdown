@@ -1,0 +1,1582 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>เงินออกยัง? · นับถอยหลังวันเงินเดือนออก</title>
+<meta name="description" content="นับถอยหลังวันเงินเดือนออก บอกว่าวันนี้ใช้ได้อีกเท่าไหร่ พร้อมเพื่อนร่วมทุกข์ที่อารมณ์เปลี่ยนตามกระเป๋าตังค์">
+<meta name="theme-color" content="#2FD27F">
+<meta property="og:title" content="เงินออกยัง?">
+<meta property="og:description" content="นับถอยหลังวันเงินเดือนออก วันนี้ใช้ได้อีกเท่าไหร่">
+<meta property="og:image" content="icons/icon-512.png">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="เงินออกยัง?">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.serif{font-family:'IBM Plex Sans Thai',system-ui,sans-serif;font-style:normal;font-weight:600;letter-spacing:-0.01em}
+.press{transition:transform .12s ease}
+.press:active{transform:scale(.94)}
+.anim-bob{animation:pdBob 2.6s ease-in-out infinite}
+.anim-dance{animation:pdDance .9s ease-in-out infinite}
+.anim-shake{animation:pdShake .45s ease-in-out infinite}
+.anim-droop{animation:pdDroop 3.4s ease-in-out infinite}
+.jumpA{animation:pdJumpA .6s cubic-bezier(.3,.7,.4,1)}
+.jumpB{animation:pdJumpB .6s cubic-bezier(.3,.7,.4,1)}
+.popA{animation:pdPopA .35s ease-out both}
+.popB{animation:pdPopB .35s ease-out both}
+.blink{transform-box:fill-box;transform-origin:center;animation:pdBlink 4.2s infinite}
+.spin{transform-box:fill-box;transform-origin:center;animation:pdSpin 14s linear infinite}
+.float1{animation:pdFloat 4s ease-in-out infinite}
+.float2{animation:pdFloat 5.2s ease-in-out infinite reverse}
+.sheet{animation:pdSheet .34s cubic-bezier(.2,.9,.3,1.08)}
+.fade{animation:pdFade .25s ease}
+@keyframes pdBob{0%,100%{transform:translateY(0) scale(1,1)}50%{transform:translateY(-8px) scale(1.03,.97)}}
+@keyframes pdDance{0%,100%{transform:rotate(-7deg) translateY(0)}50%{transform:rotate(7deg) translateY(-12px)}}
+@keyframes pdShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px) rotate(-1deg)}75%{transform:translateX(3px) rotate(1deg)}}
+@keyframes pdDroop{0%,100%{transform:translateY(0) scale(1,1)}50%{transform:translateY(5px) scale(1.05,.95)}}
+@keyframes pdJumpA{0%{transform:translateY(0) scale(1,1)}18%{transform:translateY(0) scale(1.18,.82)}50%{transform:translateY(-46px) scale(.9,1.12) rotate(-6deg)}78%{transform:translateY(0) scale(1.12,.88)}100%{transform:translateY(0) scale(1,1)}}
+@keyframes pdJumpB{0%{transform:translateY(0) scale(1,1)}18%{transform:translateY(0) scale(1.18,.82)}50%{transform:translateY(-46px) scale(.9,1.12) rotate(6deg)}78%{transform:translateY(0) scale(1.12,.88)}100%{transform:translateY(0) scale(1,1)}}
+@keyframes pdPopA{0%{transform:scale(.3);opacity:0}60%{transform:scale(1.08);opacity:1}100%{transform:scale(1);opacity:1}}
+@keyframes pdPopB{0%{transform:scale(.3);opacity:0}60%{transform:scale(1.08);opacity:1}100%{transform:scale(1);opacity:1}}
+@keyframes pdBlink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+@keyframes pdSpin{to{transform:rotate(360deg)}}
+@keyframes pdFloat{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-12px) rotate(8deg)}}
+@keyframes pdSheet{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes pdFade{from{opacity:0}to{opacity:1}}
+</style>
+<style>
+html,body{margin:0;background:#F5F5F3}
+button:focus-visible,input:focus-visible{outline:3px solid #2F6BFF;outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<template id="app-tpl">
+<div style="width: 100%; min-height: {{rootMinH}}; height: {{rootH}}; position: relative; overflow: hidden; box-sizing: border-box; background: #F5F5F3; color: #161616; font-family: 'IBM Plex Sans Thai', system-ui, sans-serif">
+<div ref="{{scrollRef}}" style="height: {{innerH}}; overflow-y: {{innerOv}}">
+
+<sc-if value="{{isSplash}}" hint-placeholder-val="{{ true }}">
+<div style="position: relative; min-height: {{screenH}}; background: #2FD27F; display: flex; flex-direction: column; align-items: center; padding: 72px 24px 40px; box-sizing: border-box; overflow: hidden; padding-top: 212px">
+  
+  
+
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 0; position: relative">
+    <span class="serif" style="font-size: 22px">Payday countdown</span>
+    <h1 style="margin: 0; font-size: 40px; font-weight: 700; line-height: 1.2">เงินออกยัง?</h1>
+  </div>
+
+  
+  <div style="position: relative; margin-top: 44px">
+    <button type="button" class="press" onClick="{{poke}}" aria-label="แตะ {{charName}}" style="border: none; background: none; padding: 0; cursor: pointer">
+      <div class="{{ci.anim}}" style="position: relative; width: 200px; height: 200px">
+  <div class="{{jumpClass}}" style="width: 100%; height: 100%">
+  <svg viewBox="0 0 200 204" width="100%" height="100%" role="img" aria-label="{{charName}} {{ci.title}}" style="overflow: visible">
+    <defs>
+      <radialGradient id="{{ci.uid}}g" cx="36%" cy="28%" r="78%">
+        <stop offset="0" stop-color="{{ci.light}}"></stop>
+        <stop offset="0.55" stop-color="{{ci.base}}"></stop>
+        <stop offset="1" stop-color="{{ci.dark}}"></stop>
+      </radialGradient>
+      <filter id="{{ci.uid}}fz" x="-12%" y="-12%" width="124%" height="124%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="4" result="n"></feTurbulence>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G" result="d"></feDisplacementMap>
+        <feGaussianBlur in="d" stdDeviation="0.7"></feGaussianBlur>
+      </filter>
+      <filter id="{{ci.uid}}gr" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="1" seed="9" result="t"></feTurbulence>
+        <feColorMatrix in="t" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.55 0" result="w"></feColorMatrix>
+        <feComposite in="w" in2="SourceGraphic" operator="in"></feComposite>
+      </filter>
+      <filter id="{{ci.uid}}bl" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="5"></feGaussianBlur></filter>
+    </defs>
+    <ellipse cx="100" cy="198" rx="58" ry="6" fill="{{ci.shadow}}" opacity="0.28"></ellipse>
+    <g filter="{{ci.bodyFilter}}" opacity="{{ci.bodyOp}}">
+      <ellipse cx="70" cy="182" rx="17" ry="10" fill="{{ci.bodyFill}}"></ellipse>
+      <ellipse cx="130" cy="182" rx="17" ry="10" fill="{{ci.bodyFill}}"></ellipse>
+      <path d="M100 20 C153 20 183 60 181 110 C179 158 147 182 100 180 C53 178 19 156 19 106 C19 56 49 20 100 20 Z" fill="{{ci.bodyFill}}" stroke="{{ci.seam}}" stroke-width="3" stroke-opacity="{{ci.seamOp}}"></path>
+    </g>
+    <path d="M100 20 C153 20 183 60 181 110 C179 158 147 182 100 180 C53 178 19 156 19 106 C19 56 49 20 100 20 Z" fill="#ffffff" filter="url(#{{ci.uid}}gr)" opacity="{{ci.grainOp}}"></path>
+    <g opacity="{{ci.glossOp}}">
+      <ellipse cx="66" cy="50" rx="30" ry="15" fill="#ffffff" opacity="0.75" transform="rotate(-24 66 50)" filter="url(#{{ci.uid}}bl)"></ellipse>
+      <ellipse cx="58" cy="46" rx="11" ry="6" fill="#ffffff" transform="rotate(-24 58 46)"></ellipse>
+      <circle cx="84" cy="36" r="4" fill="#ffffff"></circle>
+      <path d="M150 150 Q166 132 170 108" stroke="#ffffff" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.55"></path>
+    </g>
+    <path d="M30 120 Q34 160 76 174" stroke="#ffffff" stroke-width="6" stroke-linecap="round" fill="none" opacity="{{ci.rimOp}}"></path>
+    <g class="blink" opacity="{{ci.roundEyes}}">
+      <circle cx="73" cy="90" r="23" fill="#ffffff" opacity="{{ci.scleraOp}}"></circle>
+      <circle cx="127" cy="90" r="23" fill="#ffffff" opacity="{{ci.scleraOp}}"></circle>
+      <circle cx="{{ci.pLx}}" cy="{{ci.pY}}" r="{{ci.pR}}" fill="{{ci.ink}}"></circle>
+      <circle cx="{{ci.pRx}}" cy="{{ci.pY}}" r="{{ci.pR}}" fill="{{ci.ink}}"></circle>
+      <circle cx="{{ci.hLx}}" cy="{{ci.hY}}" r="3.5" fill="#ffffff"></circle>
+      <circle cx="{{ci.hRx}}" cy="{{ci.hY}}" r="3.5" fill="#ffffff"></circle>
+    </g>
+    <g opacity="{{ci.happyEyes}}" stroke="{{ci.feat}}" stroke-width="8" stroke-linecap="round" fill="none">
+      <path d="M55 98 Q73 70 91 98"></path>
+      <path d="M109 98 Q127 70 145 98"></path>
+    </g>
+    <g opacity="{{ci.xEyes}}" stroke="{{ci.feat}}" stroke-width="8" stroke-linecap="round">
+      <path d="M60 78 L86 104 M86 78 L60 104"></path>
+      <path d="M114 78 L140 104 M140 78 L114 104"></path>
+    </g>
+    <g opacity="{{ci.glasses}}">
+      <path d="M40 82 L160 82" stroke="{{ci.glassStroke}}" stroke-width="4"></path>
+      <rect x="46" y="74" width="50" height="32" rx="12" fill="#161616" stroke="{{ci.glassStroke}}" stroke-width="4"></rect>
+      <rect x="104" y="74" width="50" height="32" rx="12" fill="#161616" stroke="{{ci.glassStroke}}" stroke-width="4"></rect>
+      <path d="M58 84 L70 84" stroke="#ffffff" stroke-width="4" stroke-linecap="round"></path>
+    </g>
+    <ellipse cx="48" cy="126" rx="13" ry="8" fill="#FF7FB8" opacity="{{ci.cheeks}}"></ellipse>
+    <ellipse cx="152" cy="126" rx="13" ry="8" fill="#FF7FB8" opacity="{{ci.cheeks}}"></ellipse>
+    <path d="{{ci.mouthD}}" fill="{{ci.mouthFill}}" stroke="{{ci.feat}}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
+    <path d="M166 46 C176 62 180 72 171 79 C162 84 155 74 160 64 Z" fill="#8FD3FF" stroke="#161616" stroke-width="3" opacity="{{ci.sweat}}"></path>
+    <path d="M70 114 C75 125 78 132 70 135 C62 135 63 125 70 114 Z" fill="#8FD3FF" opacity="{{ci.tear}}"></path>
+    <g opacity="{{ci.sparkle}}" fill="#FFD84A" stroke="#161616" stroke-width="3" stroke-linejoin="round">
+      <path d="M22 26 L28 40 L42 46 L28 52 L22 66 L16 52 L2 46 L16 40 Z"></path>
+      <path d="M178 8 L182 18 L192 22 L182 26 L178 36 L174 26 L164 22 L174 18 Z"></path>
+    </g>
+  </svg>
+
+  </div>
+</div>
+
+    </button>
+    <svg class="spin" width="96" height="96" viewBox="0 0 120 120" aria-hidden="true" style="position: absolute; right: -48px; top: -36px">
+      <circle cx="60" cy="60" r="58" fill="#ffffff"></circle>
+      <path id="pdCirc" d="M60 60 m-42 0 a42 42 0 1 1 84 0 a42 42 0 1 1 -84 0" fill="none"></path>
+      <text font-size="12.5" font-weight="700" letter-spacing="3" fill="#161616" font-family="IBM Plex Sans Thai, sans-serif"><textPath href="#pdCirc">COUNTDOWN • TO • PAYDAY •</textPath></text>
+      <path d="M60 47 L63.5 56.5 L73 60 L63.5 63.5 L60 73 L56.5 63.5 L47 60 L56.5 56.5 Z" fill="#161616"></path>
+    </svg>
+    <sc-if value="{{showBubble}}" hint-placeholder-val="{{ false }}">
+      <div class="{{bubbleClass}}" style="position: absolute; left: -30px; top: -24px; background: #ffffff; border: 1.5px solid #161616; border-radius: 16px 16px 16px 4px; padding: 6px 12px; font-size: 14px; font-weight: 600; white-space: nowrap">{{bubbleText}}</div>
+    </sc-if>
+  </div><span style="margin-top: 14px; font-size: 13px">แตะ {{charName}} ได้นะ</span>
+
+  <button type="button" class="press" onClick="{{splashGo}}" style="margin-top: auto; height: 58px; width: 100%; max-width: 420px; border: none; border-radius: 999px; background: #161616; color: #ffffff; font-size: 17px; font-weight: 600; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: space-between; padding: 0 7px 0 26px">
+    <span>เริ่มนับถอยหลัง</span>
+    <span style="width: 44px; height: 44px; border-radius: 50%; background: #ffffff; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#161616" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+  </button>
+</div>
+</sc-if>
+
+<sc-if value="{{isSetup}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 12px; padding: 28px 18px 24px; min-height: {{screenH}}; box-sizing: border-box; width: 100%; max-width: 560px; margin: 0 auto">
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px">
+    <div style="display: flex; flex-direction: column">
+      <span class="serif" style="font-size: 20px">Let's set up</span>
+      <strong style="font-size: 24px; line-height: 1.25">ตั้งงบกันก่อน</strong>
+      <span style="font-size: 13px; color: #4A4A4A">ตั้งครั้งเดียว ที่เหลือเรานับให้</span>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px">
+      <button type="button" class="press" onClick="{{poke}}" aria-label="แตะ {{charName}}" style="border: none; background: none; padding: 0; cursor: pointer">
+        <div class="{{ci.anim}}" style="position: relative; width: 76px; height: 76px">
+  <div class="{{jumpClass}}" style="width: 100%; height: 100%">
+  <svg viewBox="0 0 200 204" width="100%" height="100%" role="img" aria-label="{{charName}} {{ci.title}}" style="overflow: visible">
+    <defs>
+      <radialGradient id="{{ci.uid}}g" cx="36%" cy="28%" r="78%">
+        <stop offset="0" stop-color="{{ci.light}}"></stop>
+        <stop offset="0.55" stop-color="{{ci.base}}"></stop>
+        <stop offset="1" stop-color="{{ci.dark}}"></stop>
+      </radialGradient>
+      <filter id="{{ci.uid}}fz" x="-12%" y="-12%" width="124%" height="124%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="4" result="n"></feTurbulence>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G" result="d"></feDisplacementMap>
+        <feGaussianBlur in="d" stdDeviation="0.7"></feGaussianBlur>
+      </filter>
+      <filter id="{{ci.uid}}gr" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="1" seed="9" result="t"></feTurbulence>
+        <feColorMatrix in="t" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.55 0" result="w"></feColorMatrix>
+        <feComposite in="w" in2="SourceGraphic" operator="in"></feComposite>
+      </filter>
+      <filter id="{{ci.uid}}bl" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="5"></feGaussianBlur></filter>
+    </defs>
+    <ellipse cx="100" cy="198" rx="58" ry="6" fill="{{ci.shadow}}" opacity="0.28"></ellipse>
+    <g filter="{{ci.bodyFilter}}" opacity="{{ci.bodyOp}}">
+      <ellipse cx="70" cy="182" rx="17" ry="10" fill="{{ci.bodyFill}}"></ellipse>
+      <ellipse cx="130" cy="182" rx="17" ry="10" fill="{{ci.bodyFill}}"></ellipse>
+      <path d="M100 20 C153 20 183 60 181 110 C179 158 147 182 100 180 C53 178 19 156 19 106 C19 56 49 20 100 20 Z" fill="{{ci.bodyFill}}" stroke="{{ci.seam}}" stroke-width="3" stroke-opacity="{{ci.seamOp}}"></path>
+    </g>
+    <path d="M100 20 C153 20 183 60 181 110 C179 158 147 182 100 180 C53 178 19 156 19 106 C19 56 49 20 100 20 Z" fill="#ffffff" filter="url(#{{ci.uid}}gr)" opacity="{{ci.grainOp}}"></path>
+    <g opacity="{{ci.glossOp}}">
+      <ellipse cx="66" cy="50" rx="30" ry="15" fill="#ffffff" opacity="0.75" transform="rotate(-24 66 50)" filter="url(#{{ci.uid}}bl)"></ellipse>
+      <ellipse cx="58" cy="46" rx="11" ry="6" fill="#ffffff" transform="rotate(-24 58 46)"></ellipse>
+      <circle cx="84" cy="36" r="4" fill="#ffffff"></circle>
+      <path d="M150 150 Q166 132 170 108" stroke="#ffffff" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.55"></path>
+    </g>
+    <path d="M30 120 Q34 160 76 174" stroke="#ffffff" stroke-width="6" stroke-linecap="round" fill="none" opacity="{{ci.rimOp}}"></path>
+    <g class="blink" opacity="{{ci.roundEyes}}">
+      <circle cx="73" cy="90" r="23" fill="#ffffff" opacity="{{ci.scleraOp}}"></circle>
+      <circle cx="127" cy="90" r="23" fill="#ffffff" opacity="{{ci.scleraOp}}"></circle>
+      <circle cx="{{ci.pLx}}" cy="{{ci.pY}}" r="{{ci.pR}}" fill="{{ci.ink}}"></circle>
+      <circle cx="{{ci.pRx}}" cy="{{ci.pY}}" r="{{ci.pR}}" fill="{{ci.ink}}"></circle>
+      <circle cx="{{ci.hLx}}" cy="{{ci.hY}}" r="3.5" fill="#ffffff"></circle>
+      <circle cx="{{ci.hRx}}" cy="{{ci.hY}}" r="3.5" fill="#ffffff"></circle>
+    </g>
+    <g opacity="{{ci.happyEyes}}" stroke="{{ci.feat}}" stroke-width="8" stroke-linecap="round" fill="none">
+      <path d="M55 98 Q73 70 91 98"></path>
+      <path d="M109 98 Q127 70 145 98"></path>
+    </g>
+    <g opacity="{{ci.xEyes}}" stroke="{{ci.feat}}" stroke-width="8" stroke-linecap="round">
+      <path d="M60 78 L86 104 M86 78 L60 104"></path>
+      <path d="M114 78 L140 104 M140 78 L114 104"></path>
+    </g>
+    <g opacity="{{ci.glasses}}">
+      <path d="M40 82 L160 82" stroke="{{ci.glassStroke}}" stroke-width="4"></path>
+      <rect x="46" y="74" width="50" height="32" rx="12" fill="#161616" stroke="{{ci.glassStroke}}" stroke-width="4"></rect>
+      <rect x="104" y="74" width="50" height="32" rx="12" fill="#161616" stroke="{{ci.glassStroke}}" stroke-width="4"></rect>
+      <path d="M58 84 L70 84" stroke="#ffffff" stroke-width="4" stroke-linecap="round"></path>
+    </g>
+    <ellipse cx="48" cy="126" rx="13" ry="8" fill="#FF7FB8" opacity="{{ci.cheeks}}"></ellipse>
+    <ellipse cx="152" cy="126" rx="13" ry="8" fill="#FF7FB8" opacity="{{ci.cheeks}}"></ellipse>
+    <path d="{{ci.mouthD}}" fill="{{ci.mouthFill}}" stroke="{{ci.feat}}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
+    <path d="M166 46 C176 62 180 72 171 79 C162 84 155 74 160 64 Z" fill="#8FD3FF" stroke="#161616" stroke-width="3" opacity="{{ci.sweat}}"></path>
+    <path d="M70 114 C75 125 78 132 70 135 C62 135 63 125 70 114 Z" fill="#8FD3FF" opacity="{{ci.tear}}"></path>
+    <g opacity="{{ci.sparkle}}" fill="#FFD84A" stroke="#161616" stroke-width="3" stroke-linejoin="round">
+      <path d="M22 26 L28 40 L42 46 L28 52 L22 66 L16 52 L2 46 L16 40 Z"></path>
+      <path d="M178 8 L182 18 L192 22 L182 26 L178 36 L174 26 L164 22 L174 18 Z"></path>
+    </g>
+  </svg>
+
+  </div>
+</div>
+
+      </button>
+      <span style="font-size: 12px; font-weight: 600; border: 1.5px solid #161616; border-radius: 999px; padding: 1px 10px; max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; background: #ffffff">{{previewName}}</span>
+    </div>
+  </div>
+
+  <div style="background: #ffffff; border-radius: 22px; padding: 16px; display: flex; flex-direction: column; gap: 8px">
+    <div style="display: flex; align-items: center; gap: 8px">
+      <span style="font-size: 11px; font-weight: 700; border: 1.5px solid #161616; border-radius: 999px; padding: 1px 8px">01</span>
+      <label for="budget" style="font-size: 15px; font-weight: 600">งบใช้จ่ายต่อเดือน</label>
+    </div>
+    <span style="font-size: 13px; color: #4A4A4A">หักค่าห้อง ค่าผ่อน ค่าโทรศัพท์ออกแล้ว</span>
+    <div style="display: flex; align-items: center; background: #F5F5F3; border-radius: 14px; padding: 0 14px; height: 50px">
+      <span style="font-size: 18px; font-weight: 600">฿</span>
+      <input id="budget" type="text" inputmode="numeric" placeholder="9000" value="{{budgetStr}}" onChange="{{onBudget}}" onClick="{{tickIn}}" style="flex-grow: 1; min-width: 0; border: none; outline: none; background: transparent; font-size: 20px; font-weight: 600; padding-left: 6px; font-family: inherit; color: #161616">
+    </div>
+  </div>
+
+  <div style="background: #ffffff; border-radius: 22px; padding: 16px; display: flex; flex-direction: column; gap: 8px">
+    <div style="display: flex; align-items: center; gap: 8px">
+      <span style="font-size: 11px; font-weight: 700; border: 1.5px solid #161616; border-radius: 999px; padding: 1px 8px">02</span>
+      <label for="payday" style="font-size: 15px; font-weight: 600">เงินเดือนออกวันที่</label>
+    </div>
+    <div style="display: flex; gap: 6px; flex-wrap: wrap">
+      <sc-for list="{{payChips}}" as="item" hint-placeholder-count="4">
+        <button type="button" class="press" onClick="{{item.pick}}" style="height: 36px; padding: 0 14px; border: 1.5px solid #161616; border-radius: 999px; background: {{item.bg}}; color: {{item.fg}}; font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit">{{item.label}}</button>
+      </sc-for>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px; background: #F5F5F3; border-radius: 14px; padding: 0 14px; height: 48px">
+      <span style="font-size: 13px; color: #4A4A4A; width: 29px">วันที่</span>
+      <input id="payday" type="text" inputmode="numeric" placeholder="25" value="{{paydayStr}}" onChange="{{onPayday}}" onClick="{{tickIn}}" style="flex-grow: 1; min-width: 0; border: none; outline: none; background: transparent; font-size: 18px; font-weight: 600; font-family: inherit; color: #161616">
+      <span style="font-size: 12px; color: #4A4A4A; width: 79px">31 = สิ้นเดือน</span>
+    </div>
+  </div>
+
+  <div style="background: #ffffff; border-radius: 22px; padding: 16px; display: flex; flex-direction: column; gap: 8px">
+    <div style="display: flex; align-items: center; gap: 8px">
+      <span style="font-size: 11px; font-weight: 700; border: 1.5px solid #161616; border-radius: 999px; padding: 1px 8px">03</span>
+      <label for="cname" style="font-size: 15px; font-weight: 600">ตั้งชื่อเพื่อนร่วมทุกข์</label>
+    </div>
+    <input id="cname" type="text" placeholder="เช่น น้องเงินทอง" value="{{nameStr}}" onChange="{{onName}}" onClick="{{tickIn}}" style="height: 48px; border: none; border-radius: 14px; padding: 0 14px; font-size: 17px; font-weight: 500; box-sizing: border-box; background: #F5F5F3; color: #161616; font-family: inherit; outline: none">
+  </div>
+
+  <div style="background: #ffffff; border-radius: 22px; padding: 16px; display: flex; flex-direction: column; gap: 10px">
+    <div style="display: flex; align-items: center; gap: 8px">
+      <span style="font-size: 11px; font-weight: 700; border: 1.5px solid #161616; border-radius: 999px; padding: 1px 8px">04</span>
+      <span style="font-size: 15px; font-weight: 600">เลือกผิวสัมผัส</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px">
+      <sc-for list="{{texOpts}}" as="item" hint-placeholder-count="4">
+        <button type="button" class="press" onClick="{{item.pick}}" aria-pressed="{{item.selected}}" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 2px 6px; border: 2px solid {{item.border}}; border-radius: 16px; background: {{item.bg}}; cursor: pointer; font-family: inherit; color: #161616">
+          <div style="width: 52px; height: 52px; flex-shrink: 0"><svg viewBox="0 0 200 204" width="100%" height="100%" role="img" aria-label="{{charName}} {{item.cv.title}}" style="overflow: visible">
+    <defs>
+      <radialGradient id="{{item.cv.uid}}g" cx="36%" cy="28%" r="78%">
+        <stop offset="0" stop-color="{{item.cv.light}}"></stop>
+        <stop offset="0.55" stop-color="{{item.cv.base}}"></stop>
+        <stop offset="1" stop-color="{{item.cv.dark}}"></stop>
+      </radialGradient>
+      <filter id="{{item.cv.uid}}fz" x="-12%" y="-12%" width="124%" height="124%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="4" result="n"></feTurbulence>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G" result="d"></feDisplacementMap>
+        <feGaussianBlur in="d" stdDeviation="0.7"></feGaussianBlur>
+      </filter>
+      <filter id="{{item.cv.uid}}gr" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="1" seed="9" result="t"></feTurbulence>
+        <feColorMatrix in="t" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.55 0" result="w"></feColorMatrix>
+        <feComposite in="w" in2="SourceGraphic" operator="in"></feComposite>
+      </filter>
+      <filter id="{{item.cv.uid}}bl" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="5"></feGaussianBlur></filter>
+    </defs>
+    <ellipse cx="100" cy="198" rx="58" ry="6" fill="{{item.cv.shadow}}" opacity="0.28"></ellipse>
+    <g filter="{{item.cv.bodyFilter}}" opacity="{{item.cv.bodyOp}}">
+      <ellipse cx="70" cy="182" rx="17" ry="10" fill="{{item.cv.bodyFill}}"></ellipse>
+      <ellipse cx="130" cy="182" rx="17" ry="10" fill="{{item.cv.bodyFill}}"></ellipse>
+      <path d="M100 20 C153 20 183 60 181 110 C179 158 147 182 100 180 C53 178 19 156 19 106 C19 56 49 20 100 20 Z" fill="{{item.cv.bodyFill}}" stroke="{{item.cv.seam}}" stroke-width="3" stroke-opacity="{{item.cv.seamOp}}"></path>
+    </g>
+    <path d="M100 20 C153 20 183 60 181 110 C179 158 147 182 100 180 C53 178 19 156 19 106 C19 56 49 20 100 20 Z" fill="#ffffff" filter="url(#{{item.cv.uid}}gr)" opacity="{{item.cv.grainOp}}"></path>
+    <g opacity="{{item.cv.glossOp}}">
+      <ellipse cx="66" cy="50" rx="30" ry="15" fill="#ffffff" opacity="0.75" transform="rotate(-24 66 50)" filter="url(#{{item.cv.uid}}bl)"></ellipse>
+      <ellipse cx="58" cy="46" rx="11" ry="6" fill="#ffffff" transform="rotate(-24 58 46)"></ellipse>
+      <circle cx="84" cy="36" r="4" fill="#ffffff"></circle>
+      <path d="M150 150 Q166 132 170 108" stroke="#ffffff" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.55"></path>
+    </g>
+    <path d="M30 120 Q34 160 76 174" stroke="#ffffff" stroke-width="6" stroke-linecap="round" fill="none" opacity="{{item.cv.rimOp}}"></path>
+    <g class="blink" opacity="{{item.cv.roundEyes}}">
+      <circle cx="73" cy="90" r="23" fill="#ffffff" opacity="{{item.cv.scleraOp}}"></circle>
+      <circle cx="127" cy="90" r="23" fill="#ffffff" opacity="{{item.cv.scleraOp}}"></circle>
+      <circle cx="{{item.cv.pLx}}" cy="{{item.cv.pY}}" r="{{item.cv.pR}}" fill="{{item.cv.ink}}"></circle>
+      <circle cx="{{item.cv.pRx}}" cy="{{item.cv.pY}}" r="{{item.cv.pR}}" fill="{{item.cv.ink}}"></circle>
+      <circle cx="{{item.cv.hLx}}" cy="{{item.cv.hY}}" r="3.5" fill="#ffffff"></circle>
+      <circle cx="{{item.cv.hRx}}" cy="{{item.cv.hY}}" r="3.5" fill="#ffffff"></circle>
+    </g>
+    <g opacity="{{item.cv.happyEyes}}" stroke="{{item.cv.feat}}" stroke-width="8" stroke-linecap="round" fill="none">
+      <path d="M55 98 Q73 70 91 98"></path>
+      <path d="M109 98 Q127 70 145 98"></path>
+    </g>
+    <g opacity="{{item.cv.xEyes}}" stroke="{{item.cv.feat}}" stroke-width="8" stroke-linecap="round">
+      <path d="M60 78 L86 104 M86 78 L60 104"></path>
+      <path d="M114 78 L140 104 M140 78 L114 104"></path>
+    </g>
+    <g opacity="{{item.cv.glasses}}">
+      <path d="M40 82 L160 82" stroke="{{item.cv.glassStroke}}" stroke-width="4"></path>
+      <rect x="46" y="74" width="50" height="32" rx="12" fill="#161616" stroke="{{item.cv.glassStroke}}" stroke-width="4"></rect>
+      <rect x="104" y="74" width="50" height="32" rx="12" fill="#161616" stroke="{{item.cv.glassStroke}}" stroke-width="4"></rect>
+      <path d="M58 84 L70 84" stroke="#ffffff" stroke-width="4" stroke-linecap="round"></path>
+    </g>
+    <ellipse cx="48" cy="126" rx="13" ry="8" fill="#FF7FB8" opacity="{{item.cv.cheeks}}"></ellipse>
+    <ellipse cx="152" cy="126" rx="13" ry="8" fill="#FF7FB8" opacity="{{item.cv.cheeks}}"></ellipse>
+    <path d="{{item.cv.mouthD}}" fill="{{item.cv.mouthFill}}" stroke="{{item.cv.feat}}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
+    <path d="M166 46 C176 62 180 72 171 79 C162 84 155 74 160 64 Z" fill="#8FD3FF" stroke="#161616" stroke-width="3" opacity="{{item.cv.sweat}}"></path>
+    <path d="M70 114 C75 125 78 132 70 135 C62 135 63 125 70 114 Z" fill="#8FD3FF" opacity="{{item.cv.tear}}"></path>
+    <g opacity="{{item.cv.sparkle}}" fill="#FFD84A" stroke="#161616" stroke-width="3" stroke-linejoin="round">
+      <path d="M22 26 L28 40 L42 46 L28 52 L22 66 L16 52 L2 46 L16 40 Z"></path>
+      <path d="M178 8 L182 18 L192 22 L182 26 L178 36 L174 26 L164 22 L174 18 Z"></path>
+    </g>
+  </svg>
+</div>
+          <span style="font-size: 12px; font-weight: 600">{{item.label}}</span>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+
+  <sc-if value="{{hideRemain}}" hint-placeholder-val="{{ true }}">
+    <button type="button" class="press" onClick="{{showRemainField}}" style="align-self: flex-start; height: 44px; padding: 0 4px; border: none; background: none; font-size: 13px; color: #161616; text-decoration: underline; cursor: pointer; font-family: inherit">เริ่มใช้กลางเดือน? บอกเงินที่เหลือตอนนี้</button>
+  </sc-if>
+  <sc-if value="{{showRemain}}" hint-placeholder-val="{{ false }}">
+  <div class="fade" style="background: #ffffff; border: 1.5px dashed #161616; border-radius: 22px; padding: 16px; display: flex; flex-direction: column; gap: 8px">
+    <label for="remain" style="font-size: 15px; font-weight: 600">รอบนี้เหลือเงินเท่าไหร่แล้ว</label>
+    <span style="font-size: 13px; color: #4A4A4A">ใช้แค่รอบนี้ รอบหน้ากลับไปใช้งบเต็มเดือน</span>
+    <div style="display: flex; align-items: center; background: #F5F5F3; border-radius: 14px; padding: 0 14px; height: 48px">
+      <span style="font-size: 18px; font-weight: 600">฿</span>
+      <input id="remain" type="text" inputmode="numeric" placeholder="4200" value="{{remainStr}}" onChange="{{onRemain}}" onClick="{{tickIn}}" style="flex-grow: 1; min-width: 0; border: none; outline: none; background: transparent; font-size: 18px; font-weight: 600; padding-left: 6px; font-family: inherit; color: #161616">
+    </div>
+  </div>
+  </sc-if>
+
+  <button type="button" class="press" onClick="{{start}}" aria-disabled="{{cannotStart}}" style="position: sticky; bottom: 16px; z-index: 5; box-shadow: 0 10px 28px rgba(22, 22, 22, 0.22); margin-top: auto; flex-shrink: 0; height: 58px; border: none; border-radius: 999px; background: {{startBg}}; color: {{startFg}}; font-size: 17px; font-weight: 600; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: space-between; padding: 0 7px 0 26px">
+    <span>{{startLabel}}</span>
+    <span style="width: 44px; height: 44px; border-radius: 50%; background: #ffffff; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{startArrow}}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+  </button>
+</div>
+</sc-if>
+
+<sc-if value="{{isHome}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; min-height: {{screenH}}; box-sizing: border-box">
+  <sc-if value="{{isSim}}" hint-placeholder-val="{{ false }}">
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; background: #161616; color: #ffffff; padding: 6px 12px 6px 18px; flex-shrink: 0">
+    <span style="font-size: 12px">กำลังดูอนาคต · {{todayLabel}}</span>
+    <button type="button" class="press" onClick="{{resetDay}}" style="height: 32px; padding: 0 12px; border: none; border-radius: 999px; background: #ffffff; color: #161616; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit">กลับวันนี้</button>
+  </div>
+  </sc-if>
+
+  <div style="display: flex; flex-direction: column; gap: 12px; padding: 12px clamp(14px, 3vw, 32px) 32px; width: 100%; max-width: 1200px; margin: 0 auto; box-sizing: border-box">
+
+    <div style="border-radius: 20px; background: {{heroBg}}; padding: 12px 10px 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 8px">
+      <div style="display: flex; flex-direction: column; min-width: 0">
+        <span class="serif" style="font-size: 22px; line-height: 1.15">Hello!</span>
+        <span style="font-size: 12px; color: #4A4A4A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{timeGreet}} · {{todayLabel}}</span>
+      </div>
+      <div style="display: flex; gap: 6px; flex-shrink: 0">
+        <button type="button" class="press" onClick="{{openHistory}}" aria-label="ประวัติแต่ละเดือน" style="width: 40px; height: 40px; border: 1.5px solid #161616; border-radius: 50%; background: #ffffff; cursor: pointer; display: flex; align-items: center; justify-content: center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#161616" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path><path d="M12 7v5l3 2"></path></svg>
+        </button>
+        <button type="button" class="press" onClick="{{editSetup}}" aria-label="ตั้งค่า" style="width: 40px; height: 40px; border: 1.5px solid #161616; border-radius: 50%; background: #ffffff; cursor: pointer; display: flex; align-items: center; justify-content: center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#161616" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"></path><circle cx="16" cy="7" r="2"></circle><circle cx="10" cy="17" r="2"></circle></svg>
+        </button>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start">
+    <div style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+    <div style="position: relative; border-radius: 24px; background: {{moodBg}}; padding: 14px 16px 16px; display: flex; flex-direction: column; align-items: center; gap: 2px">
+      <span style="position: absolute; left: 14px; top: 14px; font-size: 12px; font-weight: 600; background: #ffffff; border: 1.5px solid #161616; border-radius: 999px; padding: 2px 10px; transform: rotate(-5deg)">{{moodTag}}</span>
+      
+      <div style="position: relative; margin-top: 18px">
+        <button type="button" class="press" onClick="{{poke}}" aria-label="แตะ {{charName}}" style="border: none; background: none; padding: 0; cursor: pointer">
+          <div class="{{ch.anim}}" style="position: relative; width: clamp(120px, 12vw, 180px); height: clamp(120px, 12vw, 180px)">
+  <div class="{{jumpClass}}" style="width: 100%; height: 100%">
+  <svg viewBox="0 0 200 204" width="100%" height="100%" role="img" aria-label="{{charName}} {{ch.title}}" style="overflow: visible">
+    <defs>
+      <radialGradient id="{{ch.uid}}g" cx="36%" cy="28%" r="78%">
+        <stop offset="0" stop-color="{{ch.light}}"></stop>
+        <stop offset="0.55" stop-color="{{ch.base}}"></stop>
+        <stop offset="1" stop-color="{{ch.dark}}"></stop>
+      </radialGradient>
+      <filter id="{{ch.uid}}fz" x="-12%" y="-12%" width="124%" height="124%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="4" result="n"></feTurbulence>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G" result="d"></feDisplacementMap>
+        <feGaussianBlur in="d" stdDeviation="0.7"></feGaussianBlur>
+      </filter>
+      <filter id="{{ch.uid}}gr" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="1" seed="9" result="t"></feTurbulence>
+        <feColorMatrix in="t" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.55 0" result="w"></feColorMatrix>
+        <feComposite in="w" in2="SourceGraphic" operator="in"></feComposite>
+      </filter>
+      <filter id="{{ch.uid}}bl" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="5"></feGaussianBlur></filter>
+    </defs>
+    <ellipse cx="100" cy="198" rx="58" ry="6" fill="{{ch.shadow}}" opacity="0.28"></ellipse>
+    <g filter="{{ch.bodyFilter}}" opacity="{{ch.bodyOp}}">
+      <ellipse cx="70" cy="182" rx="17" ry="10" fill="{{ch.bodyFill}}"></ellipse>
+      <ellipse cx="130" cy="182" rx="17" ry="10" fill="{{ch.bodyFill}}"></ellipse>
+      <path d="M100 20 C153 20 183 60 181 110 C179 158 147 182 100 180 C53 178 19 156 19 106 C19 56 49 20 100 20 Z" fill="{{ch.bodyFill}}" stroke="{{ch.seam}}" stroke-width="3" stroke-opacity="{{ch.seamOp}}"></path>
+    </g>
+    <path d="M100 20 C153 20 183 60 181 110 C179 158 147 182 100 180 C53 178 19 156 19 106 C19 56 49 20 100 20 Z" fill="#ffffff" filter="url(#{{ch.uid}}gr)" opacity="{{ch.grainOp}}"></path>
+    <g opacity="{{ch.glossOp}}">
+      <ellipse cx="66" cy="50" rx="30" ry="15" fill="#ffffff" opacity="0.75" transform="rotate(-24 66 50)" filter="url(#{{ch.uid}}bl)"></ellipse>
+      <ellipse cx="58" cy="46" rx="11" ry="6" fill="#ffffff" transform="rotate(-24 58 46)"></ellipse>
+      <circle cx="84" cy="36" r="4" fill="#ffffff"></circle>
+      <path d="M150 150 Q166 132 170 108" stroke="#ffffff" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.55"></path>
+    </g>
+    <path d="M30 120 Q34 160 76 174" stroke="#ffffff" stroke-width="6" stroke-linecap="round" fill="none" opacity="{{ch.rimOp}}"></path>
+    <g class="blink" opacity="{{ch.roundEyes}}">
+      <circle cx="73" cy="90" r="23" fill="#ffffff" opacity="{{ch.scleraOp}}"></circle>
+      <circle cx="127" cy="90" r="23" fill="#ffffff" opacity="{{ch.scleraOp}}"></circle>
+      <circle cx="{{ch.pLx}}" cy="{{ch.pY}}" r="{{ch.pR}}" fill="{{ch.ink}}"></circle>
+      <circle cx="{{ch.pRx}}" cy="{{ch.pY}}" r="{{ch.pR}}" fill="{{ch.ink}}"></circle>
+      <circle cx="{{ch.hLx}}" cy="{{ch.hY}}" r="3.5" fill="#ffffff"></circle>
+      <circle cx="{{ch.hRx}}" cy="{{ch.hY}}" r="3.5" fill="#ffffff"></circle>
+    </g>
+    <g opacity="{{ch.happyEyes}}" stroke="{{ch.feat}}" stroke-width="8" stroke-linecap="round" fill="none">
+      <path d="M55 98 Q73 70 91 98"></path>
+      <path d="M109 98 Q127 70 145 98"></path>
+    </g>
+    <g opacity="{{ch.xEyes}}" stroke="{{ch.feat}}" stroke-width="8" stroke-linecap="round">
+      <path d="M60 78 L86 104 M86 78 L60 104"></path>
+      <path d="M114 78 L140 104 M140 78 L114 104"></path>
+    </g>
+    <g opacity="{{ch.glasses}}">
+      <path d="M40 82 L160 82" stroke="{{ch.glassStroke}}" stroke-width="4"></path>
+      <rect x="46" y="74" width="50" height="32" rx="12" fill="#161616" stroke="{{ch.glassStroke}}" stroke-width="4"></rect>
+      <rect x="104" y="74" width="50" height="32" rx="12" fill="#161616" stroke="{{ch.glassStroke}}" stroke-width="4"></rect>
+      <path d="M58 84 L70 84" stroke="#ffffff" stroke-width="4" stroke-linecap="round"></path>
+    </g>
+    <ellipse cx="48" cy="126" rx="13" ry="8" fill="#FF7FB8" opacity="{{ch.cheeks}}"></ellipse>
+    <ellipse cx="152" cy="126" rx="13" ry="8" fill="#FF7FB8" opacity="{{ch.cheeks}}"></ellipse>
+    <path d="{{ch.mouthD}}" fill="{{ch.mouthFill}}" stroke="{{ch.feat}}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
+    <path d="M166 46 C176 62 180 72 171 79 C162 84 155 74 160 64 Z" fill="#8FD3FF" stroke="#161616" stroke-width="3" opacity="{{ch.sweat}}"></path>
+    <path d="M70 114 C75 125 78 132 70 135 C62 135 63 125 70 114 Z" fill="#8FD3FF" opacity="{{ch.tear}}"></path>
+    <g opacity="{{ch.sparkle}}" fill="#FFD84A" stroke="#161616" stroke-width="3" stroke-linejoin="round">
+      <path d="M22 26 L28 40 L42 46 L28 52 L22 66 L16 52 L2 46 L16 40 Z"></path>
+      <path d="M178 8 L182 18 L192 22 L182 26 L178 36 L174 26 L164 22 L174 18 Z"></path>
+    </g>
+  </svg>
+
+  </div>
+</div>
+
+        </button>
+        <sc-if value="{{showBubble}}" hint-placeholder-val="{{ false }}">
+          <div class="{{bubbleClass}}" style="position: absolute; left: 92px; top: -8px; background: #ffffff; border: 1.5px solid #161616; border-radius: 16px 16px 16px 4px; padding: 6px 10px; font-size: 13px; font-weight: 600; white-space: nowrap">{{bubbleText}}</div>
+        </sc-if>
+      </div>
+      <strong style="font-size: 18px; line-height: 1.35">{{charName}} {{moodTitle}}</strong>
+      <span style="font-size: 13px; text-align: center; max-width: 300px">{{moodLine}}</span>
+    </div>
+
+    </div>
+    <div style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+    <div style="border-radius: 24px; background: #ffffff; padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 8px">
+        <div style="display: flex; flex-direction: column">
+          <span style="font-size: 13px; color: #4A4A4A">{{bigLabel}}</span>
+          <span style="font-size: 40px; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; color: {{bigColor}}">฿{{bigValue}}</span>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px; padding-bottom: 4px">
+          <span style="font-size: 12px; background: #F0F0EC; border-radius: 999px; padding: 2px 10px">งบวันนี้ ฿{{allowance}}</span>
+          <span style="font-size: 12px; background: #F0F0EC; border-radius: 999px; padding: 2px 10px">≈ มื้อละ ฿{{perMeal}}</span>
+        </div>
+      </div>
+      <button type="button" class="press" onClick="{{openSheet}}" style="height: 52px; border: none; border-radius: 999px; background: #161616; color: #ffffff; font-size: 16px; font-weight: 600; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: space-between; padding: 0 6px 0 22px">
+        <span>บันทึกที่ใช้ไป</span>
+        <span style="width: 40px; height: 40px; border-radius: 50%; background: #ffffff; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#161616" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></span>
+      </button>
+    </div>
+
+    <div style="border-radius: 24px; background: #ffffff; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; align-items: center; justify-content: space-between">
+        <div style="display: flex; align-items: baseline; gap: 6px">
+          <span style="font-size: 14px; font-weight: 500">อีก</span>
+          <span style="font-size: 30px; font-weight: 700; line-height: 1">{{daysLeft}}</span>
+          <span style="font-size: 14px; font-weight: 500">วัน</span>
+          <span class="serif" style="font-size: 17px; margin-left: 2px">until payday</span>
+        </div>
+        <span style="font-size: 12px; color: #4A4A4A">{{paydayShort}}</span>
+      </div>
+      <div style="height: 10px; border-radius: 999px; background: #EDEDE9; overflow: hidden">
+        <div style="width: {{progressPct}}%; height: 100%; background: #161616; border-radius: 999px"></div>
+      </div>
+    </div>
+
+    <sc-if value="{{hasToday}}" hint-placeholder-val="{{ false }}">
+    <div style="display: flex; flex-direction: column; gap: 6px; padding: 2px 4px">
+      <span style="font-size: 12px; color: #4A4A4A">วันนี้ใช้ไป · แตะเพื่อลบ</span>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px">
+        <sc-for list="{{todayItems}}" as="item" hint-placeholder-count="2">
+          <button type="button" class="press" onClick="{{item.remove}}" aria-label="ลบรายการ {{item.label}}" style="height: 32px; padding: 0 12px; border: 1.5px solid #161616; border-radius: 999px; background: #ffffff; font-size: 12px; color: #161616; cursor: pointer; font-family: inherit">{{item.label}} ✕</button>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    </div>
+    <div style="flex: 1.3 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; padding: 0 4px">
+        <div style="display: flex; flex-direction: column; line-height: 1.2">
+          <span class="serif" style="font-size: 22px">Summary</span>
+          <strong style="font-size: 14px">สรุปรอบนี้ · {{cycleRange}}</strong>
+        </div>
+        <button type="button" class="press" onClick="{{openHistory}}" style="height: 36px; padding: 0 12px; border: 1.5px solid #161616; border-radius: 999px; background: #ffffff; font-size: 12px; color: #161616; cursor: pointer; font-family: inherit">ดูย้อนหลัง</button>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+        <div style="border-radius: 20px; background: #2FD27F; padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; min-height: 92px; box-sizing: border-box">
+          <span style="font-size: 12px">ใช้ไปแล้ว</span>
+          <strong style="font-size: 18px">฿{{spentCycle}}</strong>
+          <span style="margin-top: auto; font-size: 11px">{{spentPct}}% ของ ฿{{startAmt}}</span>
+        </div>
+        <div style="border-radius: 20px; background: #C9BCF7; padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; min-height: 92px; box-sizing: border-box">
+          <span style="font-size: 12px">เฉลี่ยต่อวัน</span>
+          <strong style="font-size: 18px">฿{{avgDay}}</strong>
+          <span style="margin-top: auto; font-size: 11px">งบปกติ ฿{{baseDay}}</span>
+        </div>
+        <div style="border-radius: 20px; background: #DDF8B0; padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; min-height: 92px; box-sizing: border-box">
+          <span style="font-size: 12px">วันที่อยู่ในงบ</span>
+          <strong style="font-size: 18px">{{okDays}}</strong>
+          <span style="margin-top: auto; font-size: 11px">วันที่ผ่านไปแล้ว</span>
+        </div>
+        <div style="border-radius: 20px; background: #FFB5E8; padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; min-height: 92px; box-sizing: border-box">
+          <span style="font-size: 12px">วันที่ใช้หนักสุด</span>
+          <strong style="font-size: 18px">{{maxAmt}}</strong>
+          <span style="margin-top: auto; font-size: 11px">{{maxDay}}</span>
+        </div>
+      </div>
+      <div style="border-radius: 20px; background: #161616; color: #ffffff; padding: 14px; display: flex; flex-direction: column; gap: 2px">
+        <span style="font-size: 12px; color: #dddddd">ถ้าใช้แบบนี้ต่อไปจนเงินออก</span>
+        <strong style="font-size: 15px">{{projection}}</strong>
+      </div>
+    </div>
+
+    <button type="button" class="press" onClick="{{openSim}}" style="align-self: center; margin-top: 4px; height: 44px; padding: 0 16px; border: 1.5px dashed #161616; border-radius: 999px; background: transparent; font-size: 13px; color: #161616; cursor: pointer; font-family: inherit">ลองดูอนาคต · {{charName}} จะรู้สึกยังไง</button>
+    </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{isHistory}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; min-height: {{screenH}}; box-sizing: border-box; width: 100%; max-width: 980px; margin: 0 auto">
+  <div style="display: flex; align-items: center; gap: 10px; padding: 14px 14px 6px">
+    <button type="button" class="press" onClick="{{closeHistory}}" aria-label="กลับหน้าหลัก" style="width: 40px; height: 40px; border: 1.5px solid #161616; border-radius: 50%; background: #ffffff; cursor: pointer; display: flex; align-items: center; justify-content: center">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#161616" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+    </button>
+    <div style="display: flex; flex-direction: column; line-height: 1.2">
+      <span class="serif" style="font-size: 22px">History</span>
+      <strong style="font-size: 14px">ย้อนหลังแต่ละเดือน</strong>
+    </div>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; padding: 8px 14px 32px; align-items: start">
+    <div style="grid-column: 1 / -1; border-radius: 24px; background: #161616; color: #ffffff; padding: 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px">
+      <div style="display: flex; flex-direction: column">
+        <span style="font-size: 12px; color: #dddddd">กระปุกออม (เงินเหลือที่เก็บไว้)</span>
+        <strong style="font-size: 26px">฿{{savings}}</strong>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: flex-end">
+        <span style="font-size: 12px; color: #dddddd">อยู่ในงบ</span>
+        <strong style="font-size: 18px">{{goodCycles}}</strong>
+      </div>
+    </div>
+    <sc-for list="{{historyItems}}" as="item" hint-placeholder-count="3">
+      <div style="border-radius: 22px; background: #ffffff; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; border: {{item.border}}">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+          <div style="display: flex; flex-direction: column">
+            <strong style="font-size: 15px">{{item.title}}</strong>
+            <span style="font-size: 12px; color: #4A4A4A">{{item.range}}</span>
+          </div>
+          <span style="font-size: 12px; font-weight: 600; background: {{item.tagBg}}; border-radius: 999px; padding: 2px 10px; white-space: nowrap">{{item.tag}}</span>
+        </div>
+        <div style="height: 8px; border-radius: 999px; background: #EDEDE9; overflow: hidden">
+          <div style="width: {{item.pct}}%; height: 100%; background: {{item.barColor}}; border-radius: 999px"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 12px; color: #4A4A4A">
+          <span>ใช้ ฿{{item.spent}} / ฿{{item.start}}</span>
+          <strong style="color: #161616">{{item.result}}</strong>
+        </div>
+        <sc-if value="{{item.hasFate}}" hint-placeholder-val="{{ false }}">
+          <span style="font-size: 12px; color: #4A4A4A">{{item.fate}}</span>
+        </sc-if>
+      </div>
+    </sc-for>
+    <sc-if value="{{noHistory}}" hint-placeholder-val="{{ false }}">
+      <div style="grid-column: 1 / -1; border-radius: 22px; border: 1.5px dashed #999; padding: 20px; text-align: center; font-size: 13px; color: #4A4A4A">ยังไม่มีเดือนที่ผ่านมา ลองใช้ "ลองดูอนาคต" ข้ามไปวันเงินออกดูก็ได้</div>
+    </sc-if>
+  </div>
+</div>
+</sc-if>
+
+ </div>
+<sc-if value="{{recapOpen}}" hint-placeholder-val="{{ false }}">
+<div class="fade" style="position: {{ovPos}}; inset: 0; z-index: 20; background: rgba(22, 22, 22, 0.5); display: flex; flex-direction: column; justify-content: flex-end">
+  <div class="sheet" style="width: 100%; max-width: 520px; margin: 0 auto; box-sizing: border-box; background: #ffffff; border-radius: 30px 30px 0 0; padding: 12px 18px 24px; display: flex; flex-direction: column; gap: 12px">
+    <div style="align-self: center; width: 40px; height: 5px; border-radius: 3px; background: #D0D0CC"></div>
+    <div style="display: flex; align-items: center; gap: 12px">
+      <div style="flex-shrink: 0; border-radius: 22px; background: {{recapBg}}; padding: 8px">
+        <div class="{{cr.anim}}" style="position: relative; width: 84px; height: 84px">
+  <div class="{{jumpClass}}" style="width: 100%; height: 100%">
+  <svg viewBox="0 0 200 204" width="100%" height="100%" role="img" aria-label="{{charName}} {{cr.title}}" style="overflow: visible">
+    <defs>
+      <radialGradient id="{{cr.uid}}g" cx="36%" cy="28%" r="78%">
+        <stop offset="0" stop-color="{{cr.light}}"></stop>
+        <stop offset="0.55" stop-color="{{cr.base}}"></stop>
+        <stop offset="1" stop-color="{{cr.dark}}"></stop>
+      </radialGradient>
+      <filter id="{{cr.uid}}fz" x="-12%" y="-12%" width="124%" height="124%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="4" result="n"></feTurbulence>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G" result="d"></feDisplacementMap>
+        <feGaussianBlur in="d" stdDeviation="0.7"></feGaussianBlur>
+      </filter>
+      <filter id="{{cr.uid}}gr" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="1" seed="9" result="t"></feTurbulence>
+        <feColorMatrix in="t" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.55 0" result="w"></feColorMatrix>
+        <feComposite in="w" in2="SourceGraphic" operator="in"></feComposite>
+      </filter>
+      <filter id="{{cr.uid}}bl" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="5"></feGaussianBlur></filter>
+    </defs>
+    <ellipse cx="100" cy="198" rx="58" ry="6" fill="{{cr.shadow}}" opacity="0.28"></ellipse>
+    <g filter="{{cr.bodyFilter}}" opacity="{{cr.bodyOp}}">
+      <ellipse cx="70" cy="182" rx="17" ry="10" fill="{{cr.bodyFill}}"></ellipse>
+      <ellipse cx="130" cy="182" rx="17" ry="10" fill="{{cr.bodyFill}}"></ellipse>
+      <path d="M100 20 C153 20 183 60 181 110 C179 158 147 182 100 180 C53 178 19 156 19 106 C19 56 49 20 100 20 Z" fill="{{cr.bodyFill}}" stroke="{{cr.seam}}" stroke-width="3" stroke-opacity="{{cr.seamOp}}"></path>
+    </g>
+    <path d="M100 20 C153 20 183 60 181 110 C179 158 147 182 100 180 C53 178 19 156 19 106 C19 56 49 20 100 20 Z" fill="#ffffff" filter="url(#{{cr.uid}}gr)" opacity="{{cr.grainOp}}"></path>
+    <g opacity="{{cr.glossOp}}">
+      <ellipse cx="66" cy="50" rx="30" ry="15" fill="#ffffff" opacity="0.75" transform="rotate(-24 66 50)" filter="url(#{{cr.uid}}bl)"></ellipse>
+      <ellipse cx="58" cy="46" rx="11" ry="6" fill="#ffffff" transform="rotate(-24 58 46)"></ellipse>
+      <circle cx="84" cy="36" r="4" fill="#ffffff"></circle>
+      <path d="M150 150 Q166 132 170 108" stroke="#ffffff" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.55"></path>
+    </g>
+    <path d="M30 120 Q34 160 76 174" stroke="#ffffff" stroke-width="6" stroke-linecap="round" fill="none" opacity="{{cr.rimOp}}"></path>
+    <g class="blink" opacity="{{cr.roundEyes}}">
+      <circle cx="73" cy="90" r="23" fill="#ffffff" opacity="{{cr.scleraOp}}"></circle>
+      <circle cx="127" cy="90" r="23" fill="#ffffff" opacity="{{cr.scleraOp}}"></circle>
+      <circle cx="{{cr.pLx}}" cy="{{cr.pY}}" r="{{cr.pR}}" fill="{{cr.ink}}"></circle>
+      <circle cx="{{cr.pRx}}" cy="{{cr.pY}}" r="{{cr.pR}}" fill="{{cr.ink}}"></circle>
+      <circle cx="{{cr.hLx}}" cy="{{cr.hY}}" r="3.5" fill="#ffffff"></circle>
+      <circle cx="{{cr.hRx}}" cy="{{cr.hY}}" r="3.5" fill="#ffffff"></circle>
+    </g>
+    <g opacity="{{cr.happyEyes}}" stroke="{{cr.feat}}" stroke-width="8" stroke-linecap="round" fill="none">
+      <path d="M55 98 Q73 70 91 98"></path>
+      <path d="M109 98 Q127 70 145 98"></path>
+    </g>
+    <g opacity="{{cr.xEyes}}" stroke="{{cr.feat}}" stroke-width="8" stroke-linecap="round">
+      <path d="M60 78 L86 104 M86 78 L60 104"></path>
+      <path d="M114 78 L140 104 M140 78 L114 104"></path>
+    </g>
+    <g opacity="{{cr.glasses}}">
+      <path d="M40 82 L160 82" stroke="{{cr.glassStroke}}" stroke-width="4"></path>
+      <rect x="46" y="74" width="50" height="32" rx="12" fill="#161616" stroke="{{cr.glassStroke}}" stroke-width="4"></rect>
+      <rect x="104" y="74" width="50" height="32" rx="12" fill="#161616" stroke="{{cr.glassStroke}}" stroke-width="4"></rect>
+      <path d="M58 84 L70 84" stroke="#ffffff" stroke-width="4" stroke-linecap="round"></path>
+    </g>
+    <ellipse cx="48" cy="126" rx="13" ry="8" fill="#FF7FB8" opacity="{{cr.cheeks}}"></ellipse>
+    <ellipse cx="152" cy="126" rx="13" ry="8" fill="#FF7FB8" opacity="{{cr.cheeks}}"></ellipse>
+    <path d="{{cr.mouthD}}" fill="{{cr.mouthFill}}" stroke="{{cr.feat}}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
+    <path d="M166 46 C176 62 180 72 171 79 C162 84 155 74 160 64 Z" fill="#8FD3FF" stroke="#161616" stroke-width="3" opacity="{{cr.sweat}}"></path>
+    <path d="M70 114 C75 125 78 132 70 135 C62 135 63 125 70 114 Z" fill="#8FD3FF" opacity="{{cr.tear}}"></path>
+    <g opacity="{{cr.sparkle}}" fill="#FFD84A" stroke="#161616" stroke-width="3" stroke-linejoin="round">
+      <path d="M22 26 L28 40 L42 46 L28 52 L22 66 L16 52 L2 46 L16 40 Z"></path>
+      <path d="M178 8 L182 18 L192 22 L182 26 L178 36 L174 26 L164 22 L174 18 Z"></path>
+    </g>
+  </svg>
+
+  </div>
+</div>
+
+      </div>
+      <div style="display: flex; flex-direction: column; line-height: 1.3">
+        <span class="serif" style="font-size: 20px">New month!</span>
+        <strong style="font-size: 17px">ปิดรอบ {{recapRange}}</strong>
+        <span style="font-size: 13px; color: #4A4A4A">ใช้ไป ฿{{recapSpent}} จาก ฿{{recapStart}}</span>
+      </div>
+    </div>
+    <div style="border-radius: 20px; background: #F5F5F3; padding: 14px; display: flex; flex-direction: column; align-items: center">
+      <span style="font-size: 13px">{{recapLabel}}</span>
+      <strong style="font-size: 32px; color: {{recapColor}}">{{recapAmount}}</strong>
+      <span style="font-size: 13px; color: #4A4A4A">{{recapLine}}</span>
+    </div>
+    <span style="font-size: 13px; font-weight: 600">{{recapAsk}}</span>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+      <button type="button" class="press" onClick="{{recapA}}" style="min-height: 56px; padding: 6px 10px; border: 1.5px solid #161616; border-radius: 18px; background: #ffffff; font-size: 14px; font-weight: 600; color: #161616; cursor: pointer; font-family: inherit">{{recapALabel}}</button>
+      <button type="button" class="press" onClick="{{recapB}}" style="min-height: 56px; padding: 6px 10px; border: none; border-radius: 18px; background: #161616; font-size: 14px; font-weight: 600; color: #ffffff; cursor: pointer; font-family: inherit">{{recapBLabel}}</button>
+    </div>
+    <button type="button" class="press" onClick="{{recapHistory}}" style="height: 40px; border: none; background: none; font-size: 13px; color: #161616; text-decoration: underline; cursor: pointer; font-family: inherit">ดูประวัติทุกเดือน</button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{sheetOpen}}" hint-placeholder-val="{{ false }}">
+<div class="fade" style="position: {{ovPos}}; inset: 0; z-index: 20; background: rgba(22, 22, 22, 0.45); display: flex; flex-direction: column; justify-content: flex-end">
+  <div class="sheet" style="width: 100%; max-width: 520px; margin: 0 auto; box-sizing: border-box; background: #ffffff; border-radius: 30px 30px 0 0; padding: 12px 18px 22px; display: flex; flex-direction: column; gap: 10px">
+    <div style="align-self: center; width: 40px; height: 5px; border-radius: 3px; background: #D0D0CC"></div>
+    <div style="display: flex; align-items: baseline; justify-content: space-between">
+      <strong style="font-size: 17px">ใช้ไปเท่าไหร่</strong>
+      <span style="font-size: 12px; color: #4A4A4A">{{todayShort}}</span>
+    </div>
+    <div style="border-radius: 18px; background: #F5F5F3; padding: 8px 16px; text-align: right">
+      <span style="font-size: 36px; font-weight: 700; letter-spacing: -0.02em">฿{{amtDisplay}}</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px">
+      <sc-for list="{{chips}}" as="item" hint-placeholder-count="4">
+        <button type="button" class="press" onClick="{{item.pick}}" style="height: 38px; border: 1.5px solid #161616; border-radius: 999px; background: #ffffff; font-size: 13px; font-weight: 500; color: #161616; cursor: pointer; font-family: inherit">+{{item.label}}</button>
+      </sc-for>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+      <sc-for list="{{keys}}" as="item" hint-placeholder-count="12">
+        <button type="button" class="press" onClick="{{item.press}}" aria-label="{{item.aria}}" style="height: 48px; border: none; border-radius: 14px; background: #F5F5F3; font-size: 19px; font-weight: 500; color: #161616; cursor: pointer; font-family: inherit">{{item.label}}</button>
+      </sc-for>
+    </div>
+    <span style="font-size: 12px; text-align: center; color: {{previewColor}}">{{previewLine}}</span>
+    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 8px">
+      <button type="button" class="press" onClick="{{closeSheet}}" style="height: 52px; border: 1.5px solid #161616; border-radius: 999px; background: #ffffff; font-size: 15px; color: #161616; cursor: pointer; font-family: inherit">ยกเลิก</button>
+      <button type="button" class="press" onClick="{{save}}" style="height: 52px; border: none; border-radius: 999px; background: #161616; color: #ffffff; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit">บันทึก</button>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{texOpen}}" hint-placeholder-val="{{ false }}">
+<div class="fade" style="position: {{ovPos}}; inset: 0; z-index: 20; background: rgba(22, 22, 22, 0.45); display: flex; flex-direction: column; justify-content: flex-end">
+  <div class="sheet" style="width: 100%; max-width: 520px; margin: 0 auto; box-sizing: border-box; background: #ffffff; border-radius: 30px 30px 0 0; padding: 12px 18px 24px; display: flex; flex-direction: column; gap: 12px">
+    <div style="align-self: center; width: 40px; height: 5px; border-radius: 3px; background: #D0D0CC"></div>
+    <div style="display: flex; flex-direction: column; line-height: 1.25">
+      <span class="serif" style="font-size: 22px">Pick a look</span>
+      <strong style="font-size: 16px">เลือกผิวสัมผัสให้ {{charName}}</strong>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+      <sc-for list="{{texOpts}}" as="item" hint-placeholder-count="4">
+        <button type="button" class="press" onClick="{{item.pick}}" aria-pressed="{{item.selected}}" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px 10px; border: 2px solid {{item.border}}; border-radius: 22px; background: {{item.bg}}; cursor: pointer; font-family: inherit; color: #161616">
+          <div style="width: 92px; height: 92px; flex-shrink: 0"><svg viewBox="0 0 200 204" width="100%" height="100%" role="img" aria-label="{{charName}} {{item.cv.title}}" style="overflow: visible">
+    <defs>
+      <radialGradient id="{{item.cv.uid}}g" cx="36%" cy="28%" r="78%">
+        <stop offset="0" stop-color="{{item.cv.light}}"></stop>
+        <stop offset="0.55" stop-color="{{item.cv.base}}"></stop>
+        <stop offset="1" stop-color="{{item.cv.dark}}"></stop>
+      </radialGradient>
+      <filter id="{{item.cv.uid}}fz" x="-12%" y="-12%" width="124%" height="124%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="4" result="n"></feTurbulence>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G" result="d"></feDisplacementMap>
+        <feGaussianBlur in="d" stdDeviation="0.7"></feGaussianBlur>
+      </filter>
+      <filter id="{{item.cv.uid}}gr" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="1" seed="9" result="t"></feTurbulence>
+        <feColorMatrix in="t" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.55 0" result="w"></feColorMatrix>
+        <feComposite in="w" in2="SourceGraphic" operator="in"></feComposite>
+      </filter>
+      <filter id="{{item.cv.uid}}bl" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="5"></feGaussianBlur></filter>
+    </defs>
+    <ellipse cx="100" cy="198" rx="58" ry="6" fill="{{item.cv.shadow}}" opacity="0.28"></ellipse>
+    <g filter="{{item.cv.bodyFilter}}" opacity="{{item.cv.bodyOp}}">
+      <ellipse cx="70" cy="182" rx="17" ry="10" fill="{{item.cv.bodyFill}}"></ellipse>
+      <ellipse cx="130" cy="182" rx="17" ry="10" fill="{{item.cv.bodyFill}}"></ellipse>
+      <path d="M100 20 C153 20 183 60 181 110 C179 158 147 182 100 180 C53 178 19 156 19 106 C19 56 49 20 100 20 Z" fill="{{item.cv.bodyFill}}" stroke="{{item.cv.seam}}" stroke-width="3" stroke-opacity="{{item.cv.seamOp}}"></path>
+    </g>
+    <path d="M100 20 C153 20 183 60 181 110 C179 158 147 182 100 180 C53 178 19 156 19 106 C19 56 49 20 100 20 Z" fill="#ffffff" filter="url(#{{item.cv.uid}}gr)" opacity="{{item.cv.grainOp}}"></path>
+    <g opacity="{{item.cv.glossOp}}">
+      <ellipse cx="66" cy="50" rx="30" ry="15" fill="#ffffff" opacity="0.75" transform="rotate(-24 66 50)" filter="url(#{{item.cv.uid}}bl)"></ellipse>
+      <ellipse cx="58" cy="46" rx="11" ry="6" fill="#ffffff" transform="rotate(-24 58 46)"></ellipse>
+      <circle cx="84" cy="36" r="4" fill="#ffffff"></circle>
+      <path d="M150 150 Q166 132 170 108" stroke="#ffffff" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.55"></path>
+    </g>
+    <path d="M30 120 Q34 160 76 174" stroke="#ffffff" stroke-width="6" stroke-linecap="round" fill="none" opacity="{{item.cv.rimOp}}"></path>
+    <g class="blink" opacity="{{item.cv.roundEyes}}">
+      <circle cx="73" cy="90" r="23" fill="#ffffff" opacity="{{item.cv.scleraOp}}"></circle>
+      <circle cx="127" cy="90" r="23" fill="#ffffff" opacity="{{item.cv.scleraOp}}"></circle>
+      <circle cx="{{item.cv.pLx}}" cy="{{item.cv.pY}}" r="{{item.cv.pR}}" fill="{{item.cv.ink}}"></circle>
+      <circle cx="{{item.cv.pRx}}" cy="{{item.cv.pY}}" r="{{item.cv.pR}}" fill="{{item.cv.ink}}"></circle>
+      <circle cx="{{item.cv.hLx}}" cy="{{item.cv.hY}}" r="3.5" fill="#ffffff"></circle>
+      <circle cx="{{item.cv.hRx}}" cy="{{item.cv.hY}}" r="3.5" fill="#ffffff"></circle>
+    </g>
+    <g opacity="{{item.cv.happyEyes}}" stroke="{{item.cv.feat}}" stroke-width="8" stroke-linecap="round" fill="none">
+      <path d="M55 98 Q73 70 91 98"></path>
+      <path d="M109 98 Q127 70 145 98"></path>
+    </g>
+    <g opacity="{{item.cv.xEyes}}" stroke="{{item.cv.feat}}" stroke-width="8" stroke-linecap="round">
+      <path d="M60 78 L86 104 M86 78 L60 104"></path>
+      <path d="M114 78 L140 104 M140 78 L114 104"></path>
+    </g>
+    <g opacity="{{item.cv.glasses}}">
+      <path d="M40 82 L160 82" stroke="{{item.cv.glassStroke}}" stroke-width="4"></path>
+      <rect x="46" y="74" width="50" height="32" rx="12" fill="#161616" stroke="{{item.cv.glassStroke}}" stroke-width="4"></rect>
+      <rect x="104" y="74" width="50" height="32" rx="12" fill="#161616" stroke="{{item.cv.glassStroke}}" stroke-width="4"></rect>
+      <path d="M58 84 L70 84" stroke="#ffffff" stroke-width="4" stroke-linecap="round"></path>
+    </g>
+    <ellipse cx="48" cy="126" rx="13" ry="8" fill="#FF7FB8" opacity="{{item.cv.cheeks}}"></ellipse>
+    <ellipse cx="152" cy="126" rx="13" ry="8" fill="#FF7FB8" opacity="{{item.cv.cheeks}}"></ellipse>
+    <path d="{{item.cv.mouthD}}" fill="{{item.cv.mouthFill}}" stroke="{{item.cv.feat}}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
+    <path d="M166 46 C176 62 180 72 171 79 C162 84 155 74 160 64 Z" fill="#8FD3FF" stroke="#161616" stroke-width="3" opacity="{{item.cv.sweat}}"></path>
+    <path d="M70 114 C75 125 78 132 70 135 C62 135 63 125 70 114 Z" fill="#8FD3FF" opacity="{{item.cv.tear}}"></path>
+    <g opacity="{{item.cv.sparkle}}" fill="#FFD84A" stroke="#161616" stroke-width="3" stroke-linejoin="round">
+      <path d="M22 26 L28 40 L42 46 L28 52 L22 66 L16 52 L2 46 L16 40 Z"></path>
+      <path d="M178 8 L182 18 L192 22 L182 26 L178 36 L174 26 L164 22 L174 18 Z"></path>
+    </g>
+  </svg>
+</div>
+          <strong style="font-size: 14px">{{item.label}}</strong>
+          <span style="font-size: 12px; color: #4A4A4A">{{item.desc}}</span>
+        </button>
+      </sc-for>
+    </div>
+    <button type="button" class="press" onClick="{{closeTex}}" style="height: 50px; border: none; border-radius: 999px; background: #161616; font-size: 15px; color: #ffffff; cursor: pointer; font-family: inherit">เสร็จแล้ว</button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{simOpen}}" hint-placeholder-val="{{ false }}">
+<div class="fade" style="position: {{ovPos}}; inset: 0; z-index: 20; background: rgba(22, 22, 22, 0.45); display: flex; flex-direction: column; justify-content: flex-end">
+  <div class="sheet" style="width: 100%; max-width: 520px; margin: 0 auto; box-sizing: border-box; background: #ffffff; border-radius: 30px 30px 0 0; padding: 12px 18px 24px; display: flex; flex-direction: column; gap: 12px">
+    <div style="align-self: center; width: 40px; height: 5px; border-radius: 3px; background: #D0D0CC"></div>
+    <div style="display: flex; flex-direction: column; line-height: 1.25">
+      <span class="serif" style="font-size: 22px">Time travel</span>
+      <strong style="font-size: 16px">ลองดูอนาคต</strong>
+    </div>
+    <span style="font-size: 13px; color: #4A4A4A; line-height: 1.5">ข้ามไปวันอื่นเพื่อดูว่า {{charName}} จะรู้สึกยังไง สิ่งที่บันทึกไว้ยังอยู่ครบ กลับมาวันนี้ได้ตลอด</span>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+      <sc-for list="{{jumps}}" as="item" hint-placeholder-count="4">
+        <button type="button" class="press" onClick="{{item.go}}" style="height: 54px; border: 1.5px solid #161616; border-radius: 18px; background: #ffffff; font-size: 14px; font-weight: 500; color: #161616; cursor: pointer; font-family: inherit">{{item.label}}</button>
+      </sc-for>
+    </div>
+    <button type="button" class="press" onClick="{{closeSim}}" style="height: 50px; border: none; border-radius: 999px; background: #161616; font-size: 15px; color: #ffffff; cursor: pointer; font-family: inherit">ปิด</button>
+  </div>
+</div>
+</sc-if>
+
+</div>
+</template>
+<noscript>เว็บนี้ต้องเปิด JavaScript ก่อนใช้งาน</noscript>
+<script>
+
+(function () {
+  var STORE_KEY = 'payday-countdown:v1';
+  var KEEP = ['budget','payday','charName','override','log','carry','savings','fate','recapSeen','texture','muted'];
+  var HOLE = /\{\{\s*([^}]+?)\s*\}\}/g;
+  var root = document.getElementById('app');
+  var tpl = document.getElementById('app-tpl').content;
+  var comp, queued = false, lastScreen = null;
+
+  function lookup(scope, path) {
+    path = path.trim();
+    if (path === 'true') return true;
+    if (path === 'false') return false;
+    if (/^-?\d+(\.\d+)?$/.test(path)) return +path;
+    return path.split('.').reduce(function (o, k) { return o == null ? undefined : o[k]; }, scope);
+  }
+  function whole(str) { var m = /^\s*\{\{\s*([^}]+?)\s*\}\}\s*$/.exec(str || ''); return m ? m[1] : null; }
+  function interp(str, scope) {
+    return str.replace(HOLE, function (_, p) { var v = lookup(scope, p); return v == null ? '' : String(v); });
+  }
+
+  function build(tNode, scope, out) {
+    var kids = tNode.childNodes;
+    for (var i = 0; i < kids.length; i++) {
+      var n = kids[i];
+      if (n.nodeType === 3) {
+        out.appendChild(document.createTextNode(n.nodeValue.indexOf('{{') > -1 ? interp(n.nodeValue, scope) : n.nodeValue));
+        continue;
+      }
+      if (n.nodeType !== 1) continue;
+      var tag = n.localName;
+      if (tag === 'sc-if') {
+        if (lookup(scope, whole(n.getAttribute('value')) || 'false')) build(n, scope, out);
+        continue;
+      }
+      if (tag === 'sc-for') {
+        var list = lookup(scope, whole(n.getAttribute('list')) || '') || [];
+        var as = n.getAttribute('as') || 'item';
+        for (var j = 0; j < list.length; j++) {
+          var sc = Object.create(scope); sc[as] = list[j]; sc.$index = j;
+          build(n, sc, out);
+        }
+        continue;
+      }
+      var el = n.cloneNode(false);
+      var attrs = Array.prototype.slice.call(el.attributes);
+      for (var a = 0; a < attrs.length; a++) {
+        var name = attrs[a].name, val = attrs[a].value;
+        if (name.indexOf('hint-') === 0) { el.removeAttribute(name); continue; }
+        if (name.indexOf('on') === 0 && whole(val)) {
+          el.removeAttribute(name);
+          var fn = lookup(scope, whole(val));
+          if (typeof fn === 'function') (el.__h || (el.__h = {}))[name.slice(2)] = fn;
+          continue;
+        }
+        if (name === 'ref') {
+          el.removeAttribute(name);
+          var rf = lookup(scope, whole(val) || '');
+          if (typeof rf === 'function') el.__ref = rf;
+          continue;
+        }
+        if (val.indexOf('{{') > -1) {
+          var p = whole(val);
+          if (p) {
+            var v = lookup(scope, p);
+            if (v === false || v == null) el.removeAttribute(name); else el.setAttribute(name, String(v));
+          } else {
+            el.setAttribute(name, interp(val, scope));
+          }
+        }
+      }
+      build(n, scope, el);
+      out.appendChild(el);
+    }
+  }
+
+  function syncAttrs(live, next) {
+    var i, a;
+    var la = Array.prototype.slice.call(live.attributes);
+    for (i = 0; i < la.length; i++) if (!next.hasAttribute(la[i].name)) live.removeAttribute(la[i].name);
+    var na = next.attributes;
+    for (i = 0; i < na.length; i++) { a = na[i]; if (live.getAttribute(a.name) !== a.value) live.setAttribute(a.name, a.value); }
+  }
+  function sameKind(a, b) {
+    if (a.nodeType !== b.nodeType) return false;
+    if (a.nodeType !== 1) return true;
+    return a.localName === b.localName && a.namespaceURI === b.namespaceURI;
+  }
+  function morph(live, next) {
+    syncAttrs(live, next);
+    live.__h = next.__h; live.__ref = next.__ref;
+    if (live.localName === 'input') {
+      var want = next.getAttribute('value') || '';
+      if (live.value !== want) live.value = want;
+    }
+    morphChildren(live, next);
+  }
+  function morphChildren(live, next) {
+    var a = Array.prototype.slice.call(live.childNodes), b = Array.prototype.slice.call(next.childNodes);
+    for (var i = 0; i < b.length; i++) {
+      var ln = a[i], nn = b[i];
+      if (!ln) { live.appendChild(nn); continue; }
+      if (!sameKind(ln, nn)) { live.replaceChild(nn, ln); continue; }
+      if (ln.nodeType === 3) { if (ln.nodeValue !== nn.nodeValue) ln.nodeValue = nn.nodeValue; continue; }
+      if (ln.nodeType === 1) morph(ln, nn);
+    }
+    for (var k = a.length - 1; k >= b.length; k--) live.removeChild(a[k]);
+  }
+  function callRefs(node) {
+    if (node.__ref) node.__ref(node);
+    var c = node.children; for (var i = 0; i < c.length; i++) callRefs(c[i]);
+  }
+
+  function save() {
+    try {
+      var s = comp.state || {}, out = {};
+      KEEP.forEach(function (k) { if (k in s) out[k] = s[k]; });
+      localStorage.setItem(STORE_KEY, JSON.stringify(out));
+    } catch (e) {}
+  }
+  function render() {
+    queued = false;
+    var vals = comp.renderVals();
+    var frag = document.createElement('div');
+    build(tpl, vals, frag);
+    morphChildren(root, frag);
+    callRefs(root);
+    var scr = (comp.state && comp.state.screen) || 'splash';
+    if (lastScreen !== null && scr !== lastScreen) window.scrollTo(0, 0);
+    lastScreen = scr;
+    save();
+  }
+  function schedule() { if (!queued) { queued = true; requestAnimationFrame(render); } }
+
+  window.DCLogic = function DCLogic(props) { this.props = props || {}; this.state = null; };
+  window.DCLogic.prototype.setState = function (patch) {
+    if (typeof patch === 'function') patch = patch(this.state || {});
+    this.state = Object.assign({}, this.state, patch);
+    schedule();
+  };
+  window.DCLogic.prototype.forceUpdate = schedule;
+
+  window.__mount = function (Component) {
+    comp = new Component({ heroBg: '#ECEAF2', frame: false });
+    try {
+      var saved = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
+      if (saved && saved.budget) comp.state = Object.assign({}, saved, { screen: 'home' });
+    } catch (e) {}
+    root.addEventListener('click', function (e) {
+      var n = e.target;
+      while (n && n !== root) { if (n.__h && n.__h.click) { n.__h.click(e); return; } n = n.parentNode; }
+    });
+    root.addEventListener('input', function (e) {
+      var n = e.target; if (n.__h && n.__h.change) n.__h.change(e);
+    });
+    render();
+  };
+})();
+
+</script>
+<script>
+class Component extends DCLogic {
+  defaults() {
+    return {
+      screen: 'splash', budgetStr: '', paydayStr: '25', remainStr: '', nameStr: '', showRemain: false,
+      budget: 0, payday: 25, charName: '', override: null, log: [], offset: 0,
+      sheetOpen: false, simOpen: false, amtStr: '', muted: false,
+      jumpN: 0, bubbleN: 0, bubbleText: '', scenarioMode: false, scrollTo: false,
+      carry: {}, savings: 0, fate: {}, recapSeen: {}, texture: 'classic', texOpen: false
+    };
+  }
+  st() {
+    if (!this._init) this._init = Object.assign(this.defaults(), this.scenarioState(this.props.scenario));
+    return Object.assign({}, this._init, this.state || {});
+  }
+  num(str) {
+    const clean = String(str == null ? '' : str).replace(/[^0-9]/g, '');
+    if (clean === '') return null;
+    return parseInt(clean, 10);
+  }
+  fmt(n) { return Math.round(n).toLocaleString('th-TH'); }
+  iso(d) {
+    const p = (x) => (x < 10 ? '0' : '') + x;
+    return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+  }
+  dayDiff(a, b) { return Math.round((a - b) / 86400000); }
+  todayDate(offset) {
+    const n = new Date();
+    return new Date(n.getFullYear(), n.getMonth(), n.getDate() + offset);
+  }
+  payOn(y, m, day) {
+    const first = new Date(y, m, 1);
+    const yy = first.getFullYear(), mm = first.getMonth();
+    const last = new Date(yy, mm + 1, 0).getDate();
+    const d = new Date(yy, mm, Math.min(day, last));
+    const dow = d.getDay();
+    let shifted = false;
+    if (dow === 6) { d.setDate(d.getDate() - 1); shifted = true; }
+    if (dow === 0) { d.setDate(d.getDate() - 2); shifted = true; }
+    return { date: d, shifted: shifted };
+  }
+  cycle(t, day) {
+    let start = null, end = null, endShift = false;
+    for (let k = -2; k <= 2; k++) {
+      const c = this.payOn(t.getFullYear(), t.getMonth() + k, day);
+      if (c.date <= t && (!start || c.date > start)) start = c.date;
+      if (c.date > t && (!end || c.date < end)) { end = c.date; endShift = c.shifted; }
+    }
+    return { start: start, end: end, shifted: endShift };
+  }
+  simulate(spec) {
+    let off = 0;
+    for (let o = 0; o < 90; o++) {
+      const tt = this.todayDate(o);
+      const cc = this.cycle(tt, 25);
+      const dl = this.dayDiff(cc.end, tt), el = this.dayDiff(tt, cc.start);
+      if ((spec.elapsed != null && el === spec.elapsed) || (spec.daysLeft != null && dl === spec.daysLeft)) { off = o; break; }
+    }
+    const t = this.todayDate(off);
+    const c = this.cycle(t, 25);
+    const len = this.dayDiff(c.end, c.start);
+    const base = 9000 / len;
+    const pat = [1, 0.6, 1.4, 0.9, 1.1];
+    const el = this.dayDiff(t, c.start);
+    const log = [];
+    for (let i = 0; i < el; i++) {
+      const d = new Date(c.start.getFullYear(), c.start.getMonth(), c.start.getDate() + i);
+      const a = Math.round(base * spec.factor * pat[i % 5] / 10) * 10;
+      if (a > 0) log.push({ id: 's' + i, amt: a, date: this.iso(d) });
+    }
+    if (spec.leave != null && log.length) {
+      const sum = log.reduce((a, x) => a + x.amt, 0);
+      log[log.length - 1].amt += (9000 - spec.leave) - sum;
+    }
+    if (spec.today) log.push({ id: 'st', amt: spec.today, date: this.iso(t) });
+    let cs = c.start;
+    (spec.past || []).forEach((f, k) => {
+      const pc = this.cycle(new Date(cs.getFullYear(), cs.getMonth(), cs.getDate() - 1), 25);
+      const plen = this.dayDiff(pc.end, pc.start);
+      for (let i = 0; i < plen; i++) {
+        const d = new Date(pc.start.getFullYear(), pc.start.getMonth(), pc.start.getDate() + i);
+        const a = Math.round((9000 / plen) * f * pat[(i + k) % 5] / 10) * 10;
+        log.push({ id: 'p' + k + '-' + i, amt: a, date: this.iso(d) });
+      }
+      cs = pc.start;
+    });
+    return { offset: off, log: log, _cur: this.iso(c.start), _prev: (spec.past || []).length ? this.iso(this.cycle(new Date(c.start.getFullYear(), c.start.getMonth(), c.start.getDate() - 1), 25).start) : null };
+  }
+  scenarioState(key) {
+    if (!key) return {};
+    const filled = { budgetStr: '9000', paydayStr: '25', nameStr: 'น้องเงินทอง', scenarioMode: true };
+    const home = (spec, extra) => Object.assign({ screen: 'home', budget: 9000, payday: 25, charName: '', scenarioMode: true }, this.simulate(spec), extra || {});
+    const S = {
+      'splash': () => ({ screen: 'splash', scenarioMode: true }),
+      'setup-empty': () => ({ screen: 'setup', scenarioMode: true }),
+      'setup-filled': () => Object.assign({ screen: 'setup' }, filled),
+      'setup-mid': () => Object.assign({ screen: 'setup', showRemain: true, remainStr: '4200' }, filled),
+      'payday': () => home({ elapsed: 0, factor: 0 }),
+      'rich': () => home({ elapsed: 3, factor: 1, today: 80 }),
+      'sanity': () => home({ elapsed: 11, factor: 1, today: 150 }),
+      'frugal': () => home({ daysLeft: 9, factor: 1, today: 100 }),
+      'survival': () => home({ daysLeft: 4, factor: 1, today: 60 }),
+      'lastnight': () => home({ daysLeft: 1, factor: 1, leave: 300, today: 50 }),
+      'cool': () => home({ daysLeft: 5, factor: 0.5 }),
+      'sweating': () => home({ elapsed: 8, factor: 2.4 }),
+      'over': () => home({ elapsed: 10, factor: 1, today: 900 }),
+      'broke': () => home({ daysLeft: 6, factor: 1.45 }),
+      'poke': () => home({ elapsed: 3, factor: 1, today: 80 }, { jumpN: 2, bubbleN: 1, bubbleText: 'ชาบูมั้ย?' }),
+      'add': () => home({ elapsed: 3, factor: 1, today: 80 }, { sheetOpen: true, amtStr: '120' }),
+      'add-over': () => home({ daysLeft: 9, factor: 1, today: 100 }, { sheetOpen: true, amtStr: '900' }),
+      'future': () => home({ elapsed: 11, factor: 1, today: 150 }, { simOpen: true }),
+      'summary': () => home({ elapsed: 11, factor: 1, today: 150 }, { scrollTo: true }),
+      'tex-fuzzy': () => home({ elapsed: 3, factor: 1, today: 80 }, { texture: 'fuzzy' }),
+      'tex-balloon': () => home({ elapsed: 0, factor: 0 }, { texture: 'balloon' }),
+      'tex-jelly': () => home({ daysLeft: 9, factor: 1, today: 100 }, { texture: 'jelly' }),
+      'tex-sheet': () => home({ elapsed: 3, factor: 1, today: 80 }, { texture: 'fuzzy', texOpen: true }),
+      'setup-texture': () => ({ screen: 'setup', budgetStr: '9000', paydayStr: '25', nameStr: 'น้องเงินทอง', texture: 'jelly', scenarioMode: true }),
+      'newmonth': () => home({ elapsed: 0, factor: 0, past: [0.86] }),
+      'newmonth-over': () => home({ elapsed: 0, factor: 0, past: [1.08] }),
+      'history': () => {
+        const h = home({ elapsed: 11, factor: 1, today: 150, past: [0.86, 1.08, 0.93] }, { screen: 'history', savings: 1260 });
+        const seen = {}; seen[h._cur] = true; h.recapSeen = seen;
+        const fate = {}; if (h._prev) fate[h._prev] = 'save'; h.fate = fate;
+        return h;
+      }
+    };
+    return S[key] ? S[key]() : {};
+  }
+  sfx(kind, muted) {
+    if (muted) return;
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      if (!this._ac) this._ac = new AC();
+      const ac = this._ac;
+      if (ac.state === 'suspended') ac.resume();
+      const now = ac.currentTime;
+      const tone = (f1, f2, dur, type, vol, delay) => {
+        const o = ac.createOscillator(), g = ac.createGain();
+        const t0 = now + (delay || 0);
+        o.type = type || 'sine';
+        o.frequency.setValueAtTime(f1, t0);
+        if (f2) o.frequency.exponentialRampToValueAtTime(f2, t0 + dur);
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.exponentialRampToValueAtTime(vol || 0.15, t0 + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+        o.connect(g); g.connect(ac.destination);
+        o.start(t0); o.stop(t0 + dur + 0.03);
+      };
+      const S = {
+        tap: () => tone(620, 900, 0.08, 'sine', 0.15),
+        tick: () => tone(950, 720, 0.05, 'triangle', 0.12),
+        open: () => tone(360, 900, 0.15, 'triangle', 0.14),
+        close: () => tone(820, 330, 0.13, 'triangle', 0.12),
+        boing: () => { tone(170, 540, 0.17, 'sine', 0.22); tone(540, 250, 0.22, 'sine', 0.16, 0.16); },
+        coin: () => { tone(988, null, 0.08, 'square', 0.07); tone(1319, null, 0.28, 'square', 0.07, 0.08); },
+        start: () => { tone(523, null, 0.1, 'triangle', 0.15); tone(659, null, 0.1, 'triangle', 0.15, 0.1); tone(784, null, 0.24, 'triangle', 0.15, 0.2); },
+        whoosh: () => { tone(1400, 240, 0.25, 'sine', 0.1); },
+        nope: () => tone(230, 150, 0.2, 'sawtooth', 0.06),
+        del: () => tone(500, 380, 0.06, 'triangle', 0.11)
+      };
+      (S[kind] || S.tap)();
+    } catch (e) {}
+  }
+  mood(key) {
+    const M = {
+      payday:    { title: 'เงินเข้าแล้ว!', tag: '#PayDay', bg: '#FFE45C', eyes: 'happy', mouth: 'open', acc: 'sparkle', anim: 'anim-dance', line: 'วันนี้เราคือเศรษฐี (ชั่วคราว)', bubbles: ['รวยแล้ววว!', 'ไปกินอะไรดี~', 'อย่าเพิ่งใช้หมดนะ'] },
+      rich:      { title: 'รวยหลอนๆ', tag: '#รวยหลอนๆ', bg: '#2FD27F', eyes: 'round', mouth: 'smile', anim: 'anim-bob', line: 'ชาบูบุฟเฟต์? จัดไปไม่ต้องคิด', bubbles: ['ชาบูมั้ย?', 'ช้อปนิดนึงไม่เป็นไรหรอก', 'ใจเย็นๆ เพิ่งต้นเดือน'] },
+      sanity:    { title: 'สติเริ่มกลับมา', tag: '#เอ๊ะ', bg: '#C9BCF7', eyes: 'round', pupil: 'side', mouth: 'flat', anim: 'anim-bob', line: 'เอ๊ะ เงินหายไปไหนครึ่งนึงแล้ว', bubbles: ['เงินไปไหนนะ...', 'จดทุกบาทนะ', 'ยังไหวอยู่'] },
+      frugal:    { title: 'โหมดประหยัด', tag: '#มาม่าใส่ไข่', bg: '#DDF8B0', eyes: 'round', pupil: 'down', mouth: 'small', anim: 'anim-bob', line: 'มาม่าก็อร่อยนะ ถ้าใส่ไข่', bubbles: ['ไข่ต้มก็อร่อยนะ', 'ชงกาแฟเองดีกว่า', 'อดทนอีกนิด'] },
+      survival:  { title: 'เอาชีวิตรอด', tag: '#โหมดรอด', bg: '#FF9466', eyes: 'round', mouth: 'determined', anim: 'anim-shake', line: 'ขอเดินผ่านร้านกาแฟแบบไม่หันมอง', bubbles: ['สู้!', 'ไม่มอง ไม่มอง', 'อีกนิดเดียว'] },
+      lastnight: { title: 'ใจจะขาด', tag: '#อีกคืนเดียว', bg: '#FFB5E8', eyes: 'round', pupil: 'up', mouth: 'wavy', acc: 'tear', anim: 'anim-droop', line: 'อีกแค่คืนเดียว… อดทนไว้', bubbles: ['พรุ่งนี้แล้ว...', 'นอนเร็วๆ ดีกว่า', 'ฝันถึงเงินเดือน'] },
+      cool:      { title: 'ปลายเดือนสบายๆ', tag: '#ชิลล์', bg: '#2FD27F', eyes: 'none', mouth: 'smirk', acc: 'glasses', anim: 'anim-bob', line: 'ใครว่าปลายเดือนต้องลำบาก', bubbles: ['เก็บเก่งขนาดนี้', 'ใครจะทำไม', 'ชิลล์ๆ'] },
+      sweating:  { title: 'ใช้เร็วไปนะ', tag: '#เหงื่อตก', bg: '#FF9466', eyes: 'round', pupil: 'small', mouth: 'wavy', acc: 'sweat', anim: 'anim-shake', line: 'งบต่อวันเหลือน้อยกว่าปกติแล้ว', bubbles: ['เราทำอะไรลงไป', 'ช้าลงหน่อยนะ', 'เบรกก่อน!'] },
+      over:      { title: 'เกินงบวันนี้', tag: '#เกินงบ', bg: '#FFB5E8', eyes: 'round', mouth: 'frown', anim: 'anim-droop', line: 'ไม่เป็นไร แต่พรุ่งนี้งบจะลดลงนะ', bubbles: ['อุ๊ย เกินแล้ว', 'พรุ่งนี้เอาใหม่', 'ไม่ว่ากัน'] },
+      broke:     { title: 'หมดตัว', tag: '#หมดตัว', bg: '#D9D4E8', eyes: 'x', mouth: 'o', anim: 'anim-droop', line: 'งบรอบนี้หมดแล้ว', bubbles: ['ขอยืมได้มั้ย...', 'กินน้ำเปล่าก็ได้', 'ไม่เหลือแล้ว'] }
+    };
+    return Object.assign({ key: key }, M[key]);
+  }
+  mix(hex, to, t) {
+    const p = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+    const a = p(hex), b = p(to);
+    return '#' + a.map((v, i) => Math.round(v + (b[i] - v) * t).toString(16).padStart(2, '0')).join('');
+  }
+  bodyColor(key) {
+    return { payday: '#FFC93C', rich: '#FF6FAE', sanity: '#8DB2FF', frugal: '#B98BFF', survival: '#FFB347', lastnight: '#9AA8FF', cool: '#FF6FAE', sweating: '#FF9F45', over: '#FF6B8B', broke: '#C7B8D8' }[key] || '#FF6FAE';
+  }
+  tint(m, tex) { return tex && tex !== 'classic' ? this.mix(this.bodyColor(m.key), '#ffffff', 0.78) : m.bg; }
+  charVals(m, tex, uid) {
+    tex = tex || 'classic'; uid = uid || 'c';
+    const T = this.texVals(m, tex, uid);
+    const P = { side: [7, 0], down: [0, 8], up: [0, -8] }[m.pupil] || [0, 0];
+    const mouths = {
+      open: ['M74 124 Q100 162 126 124 Z', '#FF8FCF'],
+      smile: ['M78 126 Q100 150 122 126', 'none'],
+      small: ['M88 132 Q100 141 112 132', 'none'],
+      flat: ['M86 134 L114 134', 'none'],
+      determined: ['M82 136 L118 129', 'none'],
+      wavy: ['M78 136 Q85 128 92 136 Q99 144 106 136 Q113 128 122 136', 'none'],
+      frown: ['M82 142 Q100 125 118 142', 'none'],
+      smirk: ['M82 132 Q104 146 122 124', 'none'],
+      o: ['M100 124 C112 124 113 146 100 146 C87 146 88 124 100 124 Z', '#ffffff']
+    };
+    const mo = mouths[m.mouth];
+    return {
+      anim: m.anim, title: m.title,
+      roundEyes: m.eyes === 'round' ? 1 : 0, happyEyes: m.eyes === 'happy' ? 1 : 0, xEyes: m.eyes === 'x' ? 1 : 0,
+      glasses: m.acc === 'glasses' ? 1 : 0, sweat: m.acc === 'sweat' ? 1 : 0, tear: m.acc === 'tear' ? 1 : 0, sparkle: m.acc === 'sparkle' ? 1 : 0,
+      cheeks: m.eyes === 'x' ? 0 : (tex === 'classic' ? 0.95 : 0.6),
+      pLx: 76 + P[0], pRx: 130 + P[0], pY: 93 + P[1], pR: m.pupil === 'small' ? 6 : 11,
+      hLx: 80 + P[0], hRx: 134 + P[0], hY: 88 + P[1],
+      mouthD: mo[0], mouthFill: tex === 'classic' ? mo[1] : (m.mouth === 'open' ? '#FF5C8A' : (m.mouth === 'o' ? '#2B1830' : 'none')),
+      ...T
+    };
+  }
+  texVals(m, tex, uid) {
+    const base = this.bodyColor(m.key);
+    const ink = '#2B1830';
+    if (tex === 'classic') return {
+      uid: uid, base: '#161616', light: '#161616', dark: '#161616', shadow: '#161616',
+      bodyFill: '#161616', bodyFilter: 'none', bodyOp: 1, seam: '#161616', seamOp: 0, grainOp: 0, glossOp: 0, rimOp: 0,
+      scleraOp: 1, ink: '#161616', feat: '#ffffff', glassStroke: '#ffffff'
+    };
+    const L = { fuzzy: 0.4, balloon: 0.6, jelly: 0.65 }[tex];
+    return {
+      uid: uid, base: base, light: this.mix(base, '#ffffff', L), dark: this.mix(base, '#000000', tex === 'jelly' ? 0.06 : 0.14), shadow: base,
+      bodyFill: 'url(#' + uid + 'g)',
+      bodyFilter: tex === 'fuzzy' ? 'url(#' + uid + 'fz)' : 'none',
+      bodyOp: tex === 'jelly' ? 0.86 : 1,
+      seam: tex === 'jelly' ? '#ffffff' : this.mix(base, '#ffffff', 0.45),
+      seamOp: tex === 'balloon' ? 0.9 : (tex === 'jelly' ? 0.55 : 0),
+      grainOp: tex === 'fuzzy' ? 0.4 : 0,
+      glossOp: tex === 'fuzzy' ? 0 : 1,
+      rimOp: tex === 'jelly' ? 0.55 : (tex === 'balloon' ? 0.2 : 0),
+      scleraOp: 0, ink: ink, feat: ink, glassStroke: '#161616'
+    };
+  }
+  texList() {
+    return [['classic', 'คลาสสิก', 'ก้อนดำเรียบๆ'], ['fuzzy', 'ขนนุ่ม', 'นุ่มฟูเหมือนตุ๊กตา'], ['balloon', 'ลูกโป่ง', 'มันวาว พองๆ'], ['jelly', 'เยลลี่', 'ใสๆ หนึบๆ']];
+  }
+  extras(s, t, c, startIso, sumOn, on, set) {
+    const shortDate = (d) => d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short' });
+    const monthName = (d) => d.toLocaleDateString('th-TH', { month: 'long' });
+    const spentBetween = (a, b) => s.log.filter((x) => x.date >= this.iso(a) && x.date < this.iso(b)).reduce((acc, x) => acc + x.amt, 0);
+    const out = {};
+    // past cycles
+    const past = [];
+    let cs = c.start;
+    for (let k = 0; k < 12; k++) {
+      const pc = this.cycle(new Date(cs.getFullYear(), cs.getMonth(), cs.getDate() - 1), s.payday);
+      const piso = this.iso(pc.start);
+      const has = s.log.some((x) => x.date >= piso && x.date < this.iso(cs));
+      if (!has) break;
+      const st = this.startAmtFor(s, piso);
+      const sp = spentBetween(pc.start, cs);
+      past.push({ start: pc.start, end: cs, iso: piso, st: st, sp: sp, left: st - sp });
+      cs = pc.start;
+    }
+    const prev = past[0];
+    out.recapOpen = !!(prev && !(s.recapSeen || {})[startIso] && s.screen === 'home' && !s.sheetOpen && !s.simOpen);
+    if (prev) {
+      const lastDay = new Date(prev.end.getFullYear(), prev.end.getMonth(), prev.end.getDate() - 1);
+      const good = prev.left >= 0;
+      const rm = this.mood(good ? 'cool' : 'over');
+      const seen = Object.assign({}, s.recapSeen); seen[startIso] = true;
+      const fate = Object.assign({}, s.fate);
+      const carry = Object.assign({}, s.carry);
+      Object.assign(out, {
+        cr: this.charVals(rm, s.texture, 'cr'), recapBg: s.texture !== 'classic' ? this.tint(rm, s.texture) : (good ? '#2FD27F' : '#FFB5E8'),
+        recapRange: shortDate(prev.start) + ' – ' + shortDate(lastDay),
+        recapSpent: this.fmt(prev.sp), recapStart: this.fmt(prev.st),
+        recapLabel: good ? 'เดือนที่แล้วเหลือ' : 'เดือนที่แล้วใช้เกิน',
+        recapAmount: (good ? '+฿' : '−฿') + this.fmt(Math.abs(prev.left)),
+        recapColor: good ? '#0B7A44' : '#C4136B',
+        recapLine: good ? 'เก่งมาก! รอบนี้เริ่มใหม่ งบ ฿' + this.fmt(s.budget) : 'ไม่เป็นไร เดือนนี้เริ่มใหม่ งบ ฿' + this.fmt(s.budget),
+        recapAsk: good ? 'เงินที่เหลือ เอาไปไหนดี?' : 'ส่วนที่เกิน จะจัดการยังไง?',
+        recapALabel: good ? 'ทบเข้างบเดือนนี้' : 'เริ่มใหม่ เต็มงบ',
+        recapBLabel: good ? 'เก็บเข้ากระปุก' : 'หักจากงบเดือนนี้',
+        recapA: on(good ? 'coin' : 'tap', () => {
+          fate[prev.iso] = good ? 'carry' : 'fresh';
+          if (good) carry[startIso] = (carry[startIso] || 0) + prev.left;
+          set({ recapSeen: seen, fate: fate, carry: carry, jumpN: s.jumpN + 1, bubbleN: s.bubbleN + 1, bubbleText: good ? 'งบเพิ่ม เย้!' : 'เริ่มใหม่ สู้!' });
+        }),
+        recapB: on(good ? 'coin' : 'tap', () => {
+          fate[prev.iso] = good ? 'save' : 'deduct';
+          if (!good) carry[startIso] = (carry[startIso] || 0) + prev.left;
+          set({ recapSeen: seen, fate: fate, carry: carry, savings: s.savings + (good ? prev.left : 0), jumpN: s.jumpN + 1, bubbleN: s.bubbleN + 1, bubbleText: good ? 'กระปุกอ้วนขึ้น!' : 'โอเค รัดเข็มขัด' });
+        }),
+        recapHistory: on('open', () => set({ recapSeen: seen, screen: 'history' }))
+      });
+    }
+    // history list
+    const curSp = spentBetween(c.start, new Date(t.getFullYear(), t.getMonth(), t.getDate() + 1));
+    const curSt = this.startAmtFor(s, startIso);
+    const fateText = { carry: 'เงินเหลือทบเข้ารอบถัดไป', save: 'เงินเหลือเข้ากระปุกออม', deduct: 'ส่วนที่เกินหักจากรอบถัดไป', fresh: 'เริ่มรอบถัดไปเต็มงบ' };
+    const card = (start, end, st, sp, isCur, iso) => {
+      const left = st - sp;
+      const lastDay = new Date(end.getFullYear(), end.getMonth(), end.getDate() - 1);
+      const ratio = st > 0 ? sp / st : 0;
+      let tag, tagBg;
+      if (isCur) { tag = 'กำลังดำเนินการ'; tagBg = '#F0F0EC'; }
+      else if (left < 0) { tag = '#เกินงบ'; tagBg = '#FFB5E8'; }
+      else if (ratio > 0.95) { tag = '#พอดีเป๊ะ'; tagBg = '#C9BCF7'; }
+      else { tag = '#เก็บเก่ง'; tagBg = '#2FD27F'; }
+      const f = (s.fate || {})[iso];
+      return {
+        title: (isCur ? 'รอบนี้ · ' : '') + 'เงินเดือน ' + monthName(start),
+        range: shortDate(start) + ' – ' + shortDate(lastDay),
+        tag: tag, tagBg: tagBg,
+        pct: Math.max(3, Math.min(100, Math.round(ratio * 100))),
+        barColor: left < 0 ? '#C4136B' : '#161616',
+        spent: this.fmt(sp), start: this.fmt(st),
+        result: isCur ? 'เหลือ ฿' + this.fmt(Math.max(0, left)) : (left >= 0 ? 'เหลือ ฿' + this.fmt(left) : 'เกิน ฿' + this.fmt(-left)),
+        border: isCur ? '1.5px solid #161616' : '1.5px solid transparent',
+        hasFate: !!f, fate: f ? fateText[f] : ''
+      };
+    };
+    out.historyItems = [card(c.start, c.end, curSt, curSp, true, startIso)].concat(past.map((p) => card(p.start, p.end, p.st, p.sp, false, p.iso)));
+    out.noHistory = past.length === 0;
+    out.savings = this.fmt(s.savings || 0);
+    out.goodCycles = past.length ? past.filter((p) => p.left >= 0).length + '/' + past.length + ' เดือน' : '—';
+    return out;
+  }
+  startAmtFor(s, iso) {
+    const base = (s.override && s.override.start === iso) ? s.override.amount : s.budget;
+    return base + ((s.carry || {})[iso] || 0);
+  }
+  renderVals() {
+    const s = this.st();
+    const set = (patch) => this.setState(patch);
+    const on = (kind, fn) => (e) => { this.sfx(kind, s.muted); if (fn) fn(e); };
+    const t = this.todayDate(s.offset);
+    const tIso = this.iso(t);
+    const defaultName = 'เจ้าก้อน';
+    const charName = s.charName || defaultName;
+
+    const bNum = this.num(s.budgetStr);
+    const pNum = this.num(s.paydayStr);
+    const setupValid = !!(bNum && bNum > 0 && pNum && pNum >= 1 && pNum <= 31);
+    const firstTime = s.budget === 0;
+    const hour = new Date().getHours();
+    const timeGreet = hour < 12 ? 'อรุณสวัสดิ์' : (hour < 17 ? 'สวัสดีตอนบ่าย' : 'สวัสดีตอนเย็น');
+
+    let moodKey = 'rich';
+    const intro = this.mood('rich');
+    const jumpClass = s.jumpN === 0 ? '' : (s.jumpN % 2 ? 'jumpA' : 'jumpB');
+    const bubbleClass = s.bubbleN % 2 ? 'popA' : 'popB';
+
+    const v = {
+      isSplash: s.screen === 'splash', isSetup: s.screen === 'setup', isHome: s.screen === 'home', isHistory: s.screen === 'history',
+      openHistory: on('open', () => set({ screen: 'history', bubbleN: 0 })),
+      closeHistory: on('close', () => set({ screen: 'home' })),
+      sheetOpen: s.screen === 'home' && s.sheetOpen,
+      simOpen: s.screen === 'home' && s.simOpen,
+      isSim: s.offset > 0 && !s.scenarioMode,
+      showFutureBtn: true,
+      heroBg: this.props.heroBg ?? '#ECEAF2',
+      rootMinH: this.props.frame ? '0' : '100vh', rootH: this.props.frame ? '844px' : 'auto',
+      innerH: this.props.frame ? '100%' : 'auto', innerOv: this.props.frame ? 'auto' : 'visible',
+      screenH: this.props.frame ? '844px' : '100vh', ovPos: this.props.frame ? 'absolute' : 'fixed',
+      charName: charName, previewName: (s.nameStr || '').trim() || defaultName,
+      budgetStr: s.budgetStr, paydayStr: s.paydayStr, remainStr: s.remainStr, nameStr: s.nameStr,
+      showRemain: s.showRemain, hideRemain: !s.showRemain,
+      showRemainField: on('open', () => set({ showRemain: true })),
+      onBudget: (e) => set({ budgetStr: e.target.value }),
+      onPayday: (e) => set({ paydayStr: e.target.value }),
+      onRemain: (e) => set({ remainStr: e.target.value }),
+      onName: (e) => set({ nameStr: e.target.value }),
+      tickIn: on('tick'),
+      payChips: [['25', '25'], ['สิ้นเดือน', '31'], ['1', '1'], ['15', '15']].map((p) => ({
+        label: p[0], bg: s.paydayStr === p[1] ? '#161616' : '#ffffff', fg: s.paydayStr === p[1] ? '#ffffff' : '#161616',
+        pick: on('tick', () => set({ paydayStr: p[1] }))
+      })),
+      cannotStart: setupValid ? 'false' : 'true',
+      startBg: setupValid ? '#161616' : '#D6D6D2',
+      startFg: setupValid ? '#ffffff' : '#55554F',
+      startArrow: setupValid ? '#161616' : '#8A8A84',
+      startLabel: firstTime ? 'ไปกันเลย' : 'บันทึก',
+      start: () => {
+        if (!setupValid) { this.sfx('nope', s.muted); return; }
+        this.sfx('start', s.muted);
+        const r = this.num(s.remainStr);
+        const c = this.cycle(t, pNum);
+        set({
+          screen: 'home', budget: bNum, payday: pNum, charName: (s.nameStr || '').trim(),
+          override: r !== null ? { start: this.iso(c.start), amount: r } : s.override,
+          remainStr: '', showRemain: false, jumpN: s.jumpN + 1, bubbleN: s.bubbleN + 1,
+          bubbleText: 'ยินดีที่ได้รู้จัก!'
+        });
+      },
+      splashGo: on('start', () => set({ screen: s.budget === 0 ? 'setup' : 'home', bubbleN: 0 })),
+      timeGreet: timeGreet,
+      jumpClass: jumpClass, bubbleClass: bubbleClass,
+      showBubble: s.bubbleN > 0, bubbleText: s.bubbleText,
+      ci: this.charVals(intro, s.texture, 'ci'),
+      texOpen: (s.screen === 'home') && s.texOpen,
+      openTex: on('open', () => set({ texOpen: true })),
+      closeTex: on('close', () => set({ texOpen: false })),
+      texOpts: this.texList().map((x, i) => ({
+        label: x[1], desc: x[2], selected: s.texture === x[0] ? 'true' : 'false',
+        border: s.texture === x[0] ? '#161616' : 'transparent',
+        bg: s.texture === x[0] ? '#ffffff' : '#F5F5F3',
+        cv: this.charVals(this._curMood || intro, x[0], 'tx' + i),
+        pick: () => { this.sfx('boing', s.muted); set({ texture: x[0], jumpN: s.jumpN + 1, bubbleN: s.bubbleN + 1, bubbleText: 'ลุค' + x[1] + '!' }); }
+      })),
+      soundOn: s.muted ? 0 : 1, soundOff: s.muted ? 1 : 0,
+      muteLabel: s.muted ? 'เปิดเสียง' : 'ปิดเสียง',
+      toggleMute: () => { if (s.muted) { this.sfx('tap', false); } set({ muted: !s.muted }); },
+      editSetup: on('open', () => set({ screen: 'setup', budgetStr: String(s.budget), paydayStr: String(s.payday), nameStr: s.charName, remainStr: '', showRemain: false, sheetOpen: false, simOpen: false, bubbleN: 0 })),
+      resetDay: on('whoosh', () => set({ offset: 0, bubbleN: 0 })),
+      openSheet: on('open', () => set({ sheetOpen: true, amtStr: '' })),
+      closeSheet: on('close', () => set({ sheetOpen: false, amtStr: '' })),
+      openSim: on('open', () => set({ simOpen: true })),
+      closeSim: on('close', () => set({ simOpen: false })),
+      poke: () => {
+        this.sfx('boing', s.muted);
+        const list = (this._curMood || intro).bubbles;
+        set({ jumpN: s.jumpN + 1, bubbleN: s.bubbleN + 1, bubbleText: list[s.bubbleN % list.length] });
+      }
+    };
+    this._curMood = intro;
+
+    if (s.screen !== 'home' && s.screen !== 'history') return v;
+
+    const c = this.cycle(t, s.payday);
+    const startIso = this.iso(c.start);
+    const startAmt = this.startAmtFor(s, startIso);
+    const sumOn = (iso) => s.log.filter((x) => x.date === iso).reduce((a, x) => a + x.amt, 0);
+    const inCycle = s.log.filter((x) => x.date >= startIso && x.date <= tIso);
+    const spentCycle = inCycle.reduce((a, x) => a + x.amt, 0);
+    const todays = s.log.filter((x) => x.date === tIso);
+    const spentToday = sumOn(tIso);
+    const daysLeft = Math.max(1, this.dayDiff(c.end, t));
+    const cycleLen = Math.max(1, this.dayDiff(c.end, c.start));
+    const elapsedDays = this.dayDiff(t, c.start);
+    const remainBefore = startAmt - (spentCycle - spentToday);
+    const allowance = Math.max(0, remainBefore) / daysLeft;
+    const leftToday = allowance - spentToday;
+    const remainTotal = startAmt - spentCycle;
+    const baseline = s.budget / cycleLen;
+    const ratio = baseline > 0 ? allowance / baseline : 1;
+    const elapsedFrac = 1 - daysLeft / cycleLen;
+
+    if (elapsedDays === 0) moodKey = 'payday';
+    else if (remainTotal <= 0) moodKey = 'broke';
+    else if (leftToday < 0) moodKey = 'over';
+    else if (ratio < 0.6) moodKey = 'sweating';
+    else if (ratio > 1.4 && daysLeft <= 7) moodKey = 'cool';
+    else if (daysLeft === 1) moodKey = 'lastnight';
+    else if (daysLeft <= 5) moodKey = 'survival';
+    else if (elapsedFrac < 0.25) moodKey = 'rich';
+    else if (elapsedFrac < 0.55) moodKey = 'sanity';
+    else moodKey = 'frugal';
+    const m = this.mood(moodKey);
+    this._curMood = m;
+    let moodLine = m.line;
+    if (moodKey === 'broke') moodLine = 'งบรอบนี้หมดแล้ว ยังต้องรอดอีก ' + daysLeft + ' วัน';
+    if (moodKey === 'sweating') moodLine = 'งบต่อวันเหลือแค่ ' + Math.round(ratio * 100) + '% ของปกติ';
+
+    let rem = startAmt, okCount = 0, maxA = 0, maxIso = null;
+    for (let i = 0; i <= elapsedDays; i++) {
+      const d = new Date(c.start.getFullYear(), c.start.getMonth(), c.start.getDate() + i);
+      const sp = sumOn(this.iso(d));
+      if (i < elapsedDays) { if (sp <= Math.max(0, rem) / (cycleLen - i)) okCount++; }
+      if (sp > maxA) { maxA = sp; maxIso = d; }
+      rem -= sp;
+    }
+    const avg = spentCycle / (elapsedDays + 1);
+    const projected = startAmt - avg * cycleLen;
+
+    const amtNum = this.num(s.amtStr) || 0;
+    const afterLeft = leftToday - amtNum;
+    const jumpTo = (days) => on('whoosh', () => set({ offset: s.offset + days, simOpen: false, bubbleN: 0 }));
+    const jumps = [{ label: 'พรุ่งนี้', bg: '#DDF8B0', go: jumpTo(1) }, { label: 'อีก 1 สัปดาห์', bg: '#C9BCF7', go: jumpTo(7) }];
+    if (daysLeft > 1) jumps.push({ label: 'วันก่อนเงินออก', bg: '#FFB5E8', go: jumpTo(daysLeft - 1) });
+    jumps.push({ label: 'วันเงินออก!', bg: '#FFE45C', go: jumpTo(daysLeft) });
+    const shortDate = (d) => d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short' });
+    const lastDay = new Date(c.end.getFullYear(), c.end.getMonth(), c.end.getDate() - 1);
+    const press = (k) => {
+      if (k === 'del') return on('del', () => set({ amtStr: s.amtStr.slice(0, -1) }));
+      return on('tick', () => { const nx = (s.amtStr + k).replace(/^0+/, ''); if (nx.length <= 7) set({ amtStr: nx }); });
+    };
+    const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '00', '0', 'del'].map((k) => ({
+      label: k === 'del' ? '⌫' : k, aria: k === 'del' ? 'ลบตัวเลข' : k, press: press(k)
+    }));
+
+    return Object.assign(v, {
+      todayLabel: t.toLocaleDateString('th-TH', { weekday: 'long', day: 'numeric', month: 'short' }),
+      todayShort: t.toLocaleDateString('th-TH', { weekday: 'short', day: 'numeric', month: 'short' }),
+      texOpts: v.texOpts.map((o, i) => Object.assign({}, o, { cv: this.charVals(m, this.texList()[i][0], 'tx' + i) })),
+      ch: this.charVals(m, s.texture, 'ch'), recapOpen: false, moodBg: this.tint(m, s.texture), moodTag: m.tag, moodTitle: m.title, moodLine: moodLine,
+      bigLabel: leftToday >= 0 ? 'วันนี้ใช้ได้อีก' : 'วันนี้ใช้เกินไปแล้ว',
+      bigValue: this.fmt(Math.abs(leftToday)),
+      bigColor: leftToday >= 0 ? '#161616' : '#C4136B',
+      allowance: this.fmt(allowance), perMeal: this.fmt(allowance / 3),
+      daysLeft: String(daysLeft),
+      startAmt: this.fmt(startAmt),
+      paydayShort: c.end.toLocaleDateString('th-TH', { weekday: 'short', day: 'numeric', month: 'short' }) + (c.shifted ? ' · เลื่อนจากวันหยุด' : ''),
+      progressPct: Math.max(4, Math.min(100, Math.round(elapsedFrac * 100))),
+      hasToday: todays.length > 0,
+      todayItems: todays.map((x) => ({ label: '฿' + this.fmt(x.amt), remove: on('del', () => set({ log: s.log.filter((y) => y.id !== x.id) })) })),
+      cycleRange: shortDate(c.start) + ' – ' + shortDate(lastDay),
+      spentCycle: this.fmt(spentCycle),
+      spentPct: startAmt > 0 ? String(Math.round(spentCycle / startAmt * 100)) : '0',
+      avgDay: this.fmt(avg), baseDay: this.fmt(baseline),
+      okDays: elapsedDays > 0 ? okCount + '/' + elapsedDays + ' วัน' : 'วันแรก',
+      maxAmt: maxIso ? '฿' + this.fmt(maxA) : '—',
+      maxDay: maxIso ? shortDate(maxIso) : 'ยังไม่มีรายการ',
+      projection: spentCycle === 0 ? 'ยังไม่มีข้อมูล ลองบันทึกสักรายการ' : (projected >= 0 ? 'น่าจะเหลือประมาณ ฿' + this.fmt(projected) : 'น่าจะขาดไปประมาณ ฿' + this.fmt(-projected)),
+      jumps: jumps,
+      amtDisplay: amtNum ? this.fmt(amtNum) : '0',
+      chips: [['50', '#DDF8B0'], ['100', '#C9BCF7'], ['200', '#FFB5E8'], ['500', '#FFE45C']].map((p) => ({
+        label: p[0], bg: p[1], pick: on('tick', () => set({ amtStr: String(amtNum + parseInt(p[0], 10)) }))
+      })),
+      keys: keys,
+      previewLine: amtNum ? (afterLeft >= 0 ? 'บันทึกแล้ววันนี้จะเหลือ ฿' + this.fmt(afterLeft) : 'จะเกินงบวันนี้ ฿' + this.fmt(-afterLeft) + ' · วันที่เหลือจะเกลี่ยงบใหม่') : 'วันนี้ใช้ได้อีก ฿' + this.fmt(Math.max(0, leftToday)),
+      previewColor: amtNum && afterLeft < 0 ? '#C4136B' : '#444444',
+      save: () => {
+        if (!amtNum) { this.sfx('nope', s.muted); return; }
+        this.sfx('coin', s.muted);
+        const entry = { id: Date.now() + '-' + Math.random(), amt: amtNum, date: tIso };
+        set({ log: s.log.concat([entry]), sheetOpen: false, amtStr: '', jumpN: s.jumpN + 1, bubbleN: s.bubbleN + 1, bubbleText: afterLeft >= 0 ? 'จดแล้ว ฿' + this.fmt(amtNum) + '!' : 'อุ๊ย เกินงบแล้ว' });
+      },
+      ...this.extras(s, t, c, startIso, sumOn, on, set),
+      scrollRef: (el) => {
+        if (el && s.scrollTo && !this._scrolled) {
+          this._scrolled = true;
+          setTimeout(() => { el.scrollTop = el.scrollHeight; }, 120);
+        }
+      }
+    });
+  }
+}
+window.__mount(Component);
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+}
+</script>
+</body>
+</html>
